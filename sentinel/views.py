@@ -56,7 +56,18 @@ def index(request):
         return redirect("/")
     
     neos = fetch_neos()
-    return render(request, 'sentinel/index.html', context={'user': user, 'neos': neos})
+    
+    # Get user's favorited NEOs
+    user_favorites = set()
+    if user:
+        favorites = FavoriteNEO.objects.filter(user_email=user["email"]).values_list('name', flat=True)
+        user_favorites = set(favorites)
+    
+    return render(request, 'sentinel/index.html', context={
+        'user': user, 
+        'neos': neos,
+        'user_favorites': user_favorites
+    })
 
 # favorite neos list
 def favorites(request):
@@ -82,11 +93,21 @@ def neo_details(request):
         summary_text = summarize_asteroid(neo)
         fun_descriptions = generate_fun_descriptions(neo)
         user = request.session.get('user')
+        
+        # Check if this NEO is already favorited by the user
+        is_favorited = False
+        if user:
+            is_favorited = FavoriteNEO.objects.filter(
+                user_email=user["email"],
+                name=neo['name']
+            ).exists()
+        
         return render(request, 'sentinel/neo_details.html', {
             "neo": neo, 
             "summary": summary_text,
             "descriptions": fun_descriptions,
-            "user": user
+            "user": user,
+            "is_favorited": is_favorited
         })
     return redirect('/neos')
 
@@ -146,6 +167,40 @@ def save_favorite(request):
                 # Handle any database errors gracefully
                 print(f"Error saving favorite: {e}")
                 # Continue to redirect even if there's an error
+        
+        # Redirect back to the referring page or fallback to NEOs list
+        referer = request.META.get('HTTP_REFERER')
+        if referer:
+            return redirect(referer)
+                
+    return redirect("/neos")
+
+# Remove a NEO from favorites
+@csrf_exempt
+def unfavorite(request):
+    if request.method == "POST":
+        neo_name = request.POST.get("name")
+        user = request.session.get("user")
+
+        if user and neo_name:
+            try:
+                # Find and delete the favorite
+                favorite = FavoriteNEO.objects.filter(
+                    user_email=user["email"],
+                    name=neo_name
+                ).first()
+                
+                if favorite:
+                    favorite.delete()
+            except Exception as e:
+                # Handle any database errors gracefully
+                print(f"Error removing favorite: {e}")
+                # Continue to redirect even if there's an error
+        
+        # Redirect back to the referring page or fallback to NEOs list
+        referer = request.META.get('HTTP_REFERER')
+        if referer:
+            return redirect(referer)
                 
     return redirect("/neos")
 

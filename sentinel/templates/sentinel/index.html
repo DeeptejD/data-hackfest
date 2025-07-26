@@ -338,6 +338,21 @@
 
                     <!-- Heart Button -->
                     <div class="absolute top-3 right-3 z-20">
+                        {% if obj.name in user_favorites %}
+                        <form action="/unfavorite/" method="post" class="inline-block">
+                            {% csrf_token %}
+                            <input type="hidden" name="name" value="{{ obj.name }}">
+                            <button type="submit" title="Remove from favorites"
+                                class="bg-hot-pink bg-opacity-80 rounded-full p-2 transition-all duration-500 ease-in-out group border-2 border-hot-pink hover:scale-110 hover:bg-opacity-60">
+                                <svg class="w-4 h-4 text-white transition-colors duration-300"
+                                    fill="currentColor" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </form>
+                        {% else %}
                         <form action="/save_favorite/" method="post" class="inline-block">
                             {% csrf_token %}
                             <input type="hidden" name="name" value="{{ obj.name }}">
@@ -355,6 +370,7 @@
                                 </svg>
                             </button>
                         </form>
+                        {% endif %}
                     </div>
 
                     <!-- Specimen Name -->

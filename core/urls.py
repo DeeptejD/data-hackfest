@@ -26,6 +26,7 @@ urlpatterns = [
     path('neo-details/', views.neo_details, name='neo_details'),
     path('chat-astro/', views.chat_astro, name='chat_astro'),
     path("save_favorite/", views.save_favorite, name="save_favorite"),
+    path("unfavorite/", views.unfavorite, name="unfavorite"),
     path("neos/favorites/", views.favorites, name="favorites"),
     path("neos/", views.index, name="neos"),
     path('', views.home, name='home'),
