@@ -2,13 +2,14 @@ import os
 from django.shortcuts import render, redirect
 from authlib.integrations.django_client import OAuth
 from django.contrib.auth import logout as django_logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from .nasa import fetch_neos
 from django.views.decorators.csrf import csrf_exempt
-from .gemini import summarize_asteroid
+from .gemini import summarize_asteroid, generate_fun_descriptions, chat_with_astro
 from .models import FavoriteNEO
 
 
+# AUTH0 related stuff --------
 oauth = OAuth()
 oauth.register(
     name='auth0',
@@ -19,18 +20,6 @@ oauth.register(
     },
     server_metadata_url=f'https://{os.getenv("AUTH0_DOMAIN")}/.well-known/openid-configuration',
 )
-
-def home(request):
-    user = request.session.get('user')
-    return render(request, 'sentinel/home.html', context={'user': user})
-
-def index(request):
-    user = request.session.get('user')
-    if not user:
-        return redirect("/")
-    
-    neos = fetch_neos()
-    return render(request, 'sentinel/index.html', context={'user': user, 'neos': neos})
 
 def login(request):
     return oauth.auth0.authorize_redirect(request, os.getenv("AUTH0_CALLBACK_URL"))
@@ -53,20 +42,23 @@ def logout(request):
         f'client_id={os.getenv("AUTH0_CLIENT_ID")}'
     )
 
-@csrf_exempt
-def summary(request):
-    if request.method == "POST":
-        neo = {
-            'name': request.POST.get("name"),
-            'diameter': request.POST.get("diameter"),
-            'speed': request.POST.get("speed"),
-            'miss_distance': request.POST.get("miss_distance"),
-            'date': request.POST.get("date"),
-        }
-        summary_text = summarize_asteroid(neo)
-        return render(request, 'sentinel/summary.html', {"summary": summary_text, "neo": neo})
-    return redirect('/')
+# AUTH related stuff ends --------
 
+# Before and After login home page loads on root
+def home(request):
+    user = request.session.get('user')
+    return render(request, 'sentinel/home.html', context={'user': user})
+
+# neos listing page
+def index(request):
+    user = request.session.get('user')
+    if not user:
+        return redirect("/")
+    
+    neos = fetch_neos()
+    return render(request, 'sentinel/index.html', context={'user': user, 'neos': neos})
+
+# favorite neos list
 def favorites(request):
     user = request.session.get("user")
     if not user:
@@ -75,6 +67,50 @@ def favorites(request):
     favs = FavoriteNEO.objects.filter(user_email=user["email"])
     return render(request, "sentinel/favorites.html", {"favorites": favs, "user": user})
 
+# details page about each neo
+@csrf_exempt
+def neo_details(request):
+    if request.method == "POST":
+        neo = {
+            'name': request.POST.get("name"),
+            'diameter': request.POST.get("diameter"),
+            'speed': request.POST.get("speed"),
+            'miss_distance': request.POST.get("miss_distance"),
+            'date': request.POST.get("date"),
+        }
+        # Get AI summary and fun descriptions for this NEO
+        summary_text = summarize_asteroid(neo)
+        fun_descriptions = generate_fun_descriptions(neo)
+        user = request.session.get('user')
+        return render(request, 'sentinel/neo_details.html', {
+            "neo": neo, 
+            "summary": summary_text,
+            "descriptions": fun_descriptions,
+            "user": user
+        })
+    return redirect('/neos')
+
+# an endpoint that take takes neo details and a question and returns a json response from gemini
+@csrf_exempt
+def chat_astro(request):
+    if request.method == "POST":
+        neo = {
+            'name': request.POST.get("name"),
+            'diameter': request.POST.get("diameter"),
+            'speed': request.POST.get("speed"),
+            'miss_distance': request.POST.get("miss_distance"),
+            'date': request.POST.get("date"),
+        }
+        question = request.POST.get("question")
+        response = chat_with_astro(neo, question)
+        
+        return JsonResponse({
+            'response': response,
+            'success': True
+        })
+    return JsonResponse({'success': False})
+
+# saved the current neo as a favorite
 @csrf_exempt
 def save_favorite(request):
     if request.method == "POST":

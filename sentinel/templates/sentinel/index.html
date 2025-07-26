@@ -15,31 +15,261 @@
                         'space-gray': '#1a1a2e',
                         'space-blue': '#16213e',
                         'cosmic-purple': '#6366f1',
-                        'stellar-cyan': '#06b6d4'
+                        'stellar-cyan': '#06b6d4',
+                        'neon-green': '#39ff14',
+                        'electric-blue': '#00ffff',
+                        'hot-pink': '#ff1493'
                     }
                 }
             }
         }
     </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap');
+
+        /* Hand-drawn pencil border effect */
+        .sketch-border {
+            position: relative;
+            border: none;
+        }
+
+        .sketch-border::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: transparent;
+            border: 2px solid #39ff14;
+            border-radius: 15px;
+            filter: url(#roughen);
+            animation: sketch-glow 3s ease-in-out infinite alternate;
+        }
+
+        .sketch-border-purple::before {
+            border-color: #ff1493;
+        }
+
+        .sketch-border-cyan::before {
+            border-color: #00ffff;
+        }
+
+        @keyframes sketch-glow {
+            0% {
+                filter: drop-shadow(0 0 5px currentColor);
+                transform: rotate(-0.5deg);
+            }
+
+            100% {
+                filter: drop-shadow(0 0 15px currentColor);
+                transform: rotate(0.5deg);
+            }
+        }
+
+        /* Science lab notebook lines */
+        .lab-notes {
+            background-image:
+                linear-gradient(90deg, #ff1493 0%, transparent 1%),
+                linear-gradient(0deg, rgba(57, 255, 20, 0.1) 0%, transparent 1%);
+            background-size: 20px 20px;
+        }
+
+        /* Retro CRT screen effect */
+        .crt-screen {
+            background: linear-gradient(180deg,
+                    transparent 50%,
+                    rgba(0, 255, 255, 0.03) 50%);
+            background-size: 100% 4px;
+            animation: crt-flicker 0.15s infinite linear;
+        }
+
+        @keyframes crt-flicker {
+            0% {
+                opacity: 1;
+            }
+
+            98% {
+                opacity: 1;
+            }
+
+            99% {
+                opacity: 0.98;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Teenager-style doodle animations */
+        .doodle-bounce {
+            animation: doodle 2s ease-in-out infinite;
+        }
+
+        @keyframes doodle {
+
+            0%,
+            100% {
+                transform: rotate(-5deg) translateY(0px);
+            }
+
+            50% {
+                transform: rotate(5deg) translateY(-10px);
+            }
+        }
+
+        /* Smooth hover transitions */
+        .smooth-hover {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .smooth-hover:hover {
+            transform: scale(1.03) rotate(1deg);
+        }
+
+        /* Asteroid Space Background */
+        .asteroid-space-bg {
+            background: radial-gradient(ellipse at center, #2d1b69 0%, #0f0c29 30%, #000000 70%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .asteroid-space-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                /* Stars */
+                radial-gradient(1px 1px at 20px 30px, white, transparent),
+                radial-gradient(1px 1px at 40px 70px, white, transparent),
+                radial-gradient(2px 2px at 90px 40px, white, transparent),
+                radial-gradient(1px 1px at 130px 80px, white, transparent),
+                radial-gradient(2px 2px at 160px 30px, white, transparent),
+                radial-gradient(1px 1px at 200px 50px, white, transparent),
+                /* Asteroid/debris field */
+                radial-gradient(3px 2px at 50px 20px, rgba(139, 69, 19, 0.6), transparent),
+                radial-gradient(2px 3px at 150px 60px, rgba(160, 82, 45, 0.5), transparent),
+                radial-gradient(4px 3px at 100px 100px, rgba(101, 67, 33, 0.7), transparent),
+                radial-gradient(2px 2px at 180px 25px, rgba(139, 69, 19, 0.4), transparent);
+            background-repeat: repeat;
+            background-size: 250px 120px;
+            animation: asteroid-drift 8s ease-in-out infinite alternate;
+            opacity: 0.8;
+        }
+
+        .asteroid-space-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(255, 20, 147, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(0, 255, 255, 0.08) 0%, transparent 50%);
+            animation: nebula-glow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes asteroid-drift {
+            0% {
+                transform: translateX(0px) translateY(0px);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateX(-10px) translateY(-5px);
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes nebula-glow {
+            0% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
+        }
+
+        /* Cool holographic text effect */
+        .holo-text {
+            background: linear-gradient(45deg, #39ff14, #00ffff, #ff1493, #6366f1);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: holo-shift 3s ease-in-out infinite;
+        }
+
+        @keyframes holo-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+
+    <!-- SVG Filters for rough pencil effect -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <defs>
+            <filter id="roughen">
+                <feTurbulence baseFrequency="0.04" numOctaves="3" result="noise" seed="1" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+            </filter>
+        </defs>
+    </svg>
 </head>
 
-<body class="bg-space-black min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-space-gray border-b border-space-blue">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+<body class="bg-space-black min-h-screen crt-screen lab-notes" style="font-family: 'Space Mono', monospace;">
+
+    <!-- Cool Navigation Lab Style -->
+    <nav class="bg-space-gray relative overflow-hidden">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex items-center justify-between h-20">
                 <div class="flex items-center space-x-8">
-                    <h1 class="text-2xl font-bold text-white">Cosmic Sentinel</h1>
-                    <div class="hidden md:flex space-x-6">
-                        <a href="/" class="text-gray-300 hover:text-white transition-colors duration-200">Home</a>
-                        <a href="/neos" class="text-cosmic-purple font-medium">NEOs</a>
+                    <!-- Cool logo -->
+                    <div class="flex items-center space-x-3">
+                        <h1 class="text-2xl font-black holo-text" style="font-family: 'Orbitron', monospace;">
+                            COSMIC SENTINEL
+                        </h1>
+                    </div>
+
+                    <!-- Navigation Links -->
+                    <div class="hidden md:flex space-x-8">
+                        <a href="/"
+                            class="text-gray-300 hover:text-neon-green transition-colors duration-200 font-bold relative group">
+                            Home
+                            <span
+                                class="absolute -bottom-1 left-0 w-0 h-0.5 bg-neon-green group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                        <a href="/neos" class="text-electric-blue font-black relative">
+                            NEOs
+                            <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-electric-blue"></span>
+                        </a>
                         <a href="/neos/favorites"
-                            class="text-gray-300 hover:text-white transition-colors duration-200">Favorites</a>
+                            class="text-gray-300 hover:text-hot-pink transition-colors duration-200 font-bold relative group">
+                            Favorites
+                            <span
+                                class="absolute -bottom-1 left-0 w-0 h-0.5 bg-hot-pink group-hover:w-full transition-all duration-300"></span>
+                        </a>
                     </div>
                 </div>
+
+                <!-- User Info -->
                 <div class="flex items-center space-x-4">
-                    <span class="text-gray-300">{{ user.name }}</span>
-                    <a href="/logout" class="text-red-400 hover:text-red-300 transition-colors duration-200">
+                    <div class="text-neon-green font-bold">{{ user.name }}</div>
+                    <a href="/logout" class="text-red-400 hover:text-red-300 transition-colors duration-200 font-bold">
                         Logout
                     </a>
                 </div>
@@ -47,44 +277,67 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Header -->
-        <div class="mb-8">
-            <h2 class="text-3xl font-bold text-white mb-2">Near-Earth Objects</h2>
-            <p class="text-gray-400">Real-time monitoring of asteroids approaching Earth</p>
+    <!-- EPIC Header Section -->
+    <section class="relative py-16 overflow-hidden">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <!-- Main Title -->
+            <div class="mb-8">
+                <h2 class="text-6xl font-black mb-4 holo-text" style="font-family: 'Orbitron', monospace;">
+                    SPACE ROCKS DETECTED!
+                </h2>
+                <div class="text-2xl text-white font-bold mb-2">
+                    <span class="text-neon-green">MISSION:</span>
+                    <span class="text-electric-blue">Explore</span>
+                    <span class="text-hot-pink">Epic</span>
+                    <span class="text-stellar-cyan">Asteroids!</span>
+                </div>
+                <p class="text-lg text-gray-300 max-w-2xl mx-auto">
+                    Welcome to the ultimate space lab! These cosmic visitors are zooming past Earth right now -
+                    let's study them like real space scientists!
+                </p>
+            </div>
+
+            <!-- Cool stats banner -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div class="sketch-border bg-space-gray p-6 rounded-2xl">
+                    <div class="text-4xl font-black text-neon-green mb-2">{{ neos|length }}</div>
+                    <div class="text-white font-bold">Space Rocks Found!</div>
+                </div>
+                <div class="sketch-border sketch-border-purple bg-space-gray p-6 rounded-2xl">
+                    <div class="text-4xl font-black text-hot-pink mb-2">100%</div>
+                    <div class="text-white font-bold">Earth Safety Rate!</div>
+                </div>
+                <div class="sketch-border sketch-border-cyan bg-space-gray p-6 rounded-2xl">
+                    <div class="text-4xl font-black text-electric-blue mb-2">∞</div>
+                    <div class="text-white font-bold">Fun Level!</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ASTEROID LAB CARDS -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+            <h3 class="text-3xl font-black text-white mb-4" style="font-family: 'Orbitron', monospace;">
+                RESEARCH SPECIMENS
+            </h3>
+            <p class="text-lg text-gray-300">Each card is like a lab report - click to investigate further!</p>
         </div>
 
-        <!-- NEOs Grid -->
-        <div class="grid gap-6">
+        <!-- Cool Card Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {% for obj in neos %}
-            <div
-                class="bg-space-gray border border-space-blue rounded-lg p-6 hover:border-cosmic-purple transition-colors duration-300">
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                    <div class="flex-1">
-                        <h3 class="text-xl font-semibold text-white mb-4">{{ obj.name }}</h3>
-                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                            <div>
-                                <span class="text-gray-400">Size</span>
-                                <p class="text-white font-medium">{{ obj.diameter }} m</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400">Speed</span>
-                                <p class="text-white font-medium">{{ obj.speed }} km/s</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400">Distance</span>
-                                <p class="text-white font-medium">{{ obj.miss_distance }} LD</p>
-                            </div>
-                            <div>
-                                <span class="text-gray-400">Date</span>
-                                <p class="text-white font-medium">{{ obj.date }}</p>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Individual Lab Report Card -->
+            <div class="sketch-border bg-space-gray rounded-2xl overflow-hidden smooth-hover relative group">
 
-                    <div class="flex flex-col sm:flex-row gap-3 mt-6 lg:mt-0 lg:ml-6">
-                        <!-- Save to Favorites Button -->
+                <!-- Lab Report Header -->
+                <div class="asteroid-space-bg p-4 relative">
+
+                    <!-- Heart Button -->
+                    <div class="absolute top-3 right-3 z-20">
                         <form action="/save_favorite/" method="post" class="inline-block">
                             {% csrf_token %}
                             <input type="hidden" name="name" value="{{ obj.name }}">
@@ -92,31 +345,192 @@
                             <input type="hidden" name="speed" value="{{ obj.speed }}">
                             <input type="hidden" name="miss_distance" value="{{ obj.miss_distance }}">
                             <input type="hidden" name="date" value="{{ obj.date }}">
-                            <button type="submit"
-                                class="w-full sm:w-auto px-4 py-2 bg-stellar-cyan hover:bg-cyan-600 text-white rounded-lg font-medium transition-colors duration-200">
-                                Save to Favorites
-                            </button>
-                        </form>
-
-                        <!-- AI Summary Button -->
-                        <form method="post" action="/summary/" class="inline-block">
-                            {% csrf_token %}
-                            <input type="hidden" name="name" value="{{ obj.name }}">
-                            <input type="hidden" name="diameter" value="{{ obj.diameter }}">
-                            <input type="hidden" name="speed" value="{{ obj.speed }}">
-                            <input type="hidden" name="miss_distance" value="{{ obj.miss_distance }}">
-                            <input type="hidden" name="date" value="{{ obj.date }}">
-                            <button type="submit"
-                                class="w-full sm:w-auto px-4 py-2 bg-cosmic-purple hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors duration-200">
-                                AI Summary
+                            <button type="submit" title="Add to favorites"
+                                class="bg-black bg-opacity-50 hover:bg-hot-pink rounded-full p-2 transition-all duration-500 ease-in-out group border-2 border-neon-green hover:border-hot-pink hover:scale-110">
+                                <svg class="w-4 h-4 text-neon-green group-hover:text-white transition-colors duration-300"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                    </path>
+                                </svg>
                             </button>
                         </form>
                     </div>
+
+                    <!-- Specimen Name -->
+                    <div class="text-center pr-10 relative z-10">
+                        <div class="text-xs text-electric-blue font-bold mb-1">SPECIMEN #{{ forloop.counter }}</div>
+                        <h3 class="text-white font-black text-lg leading-tight">{{ obj.name }}</h3>
+                        <div class="text-xs text-neon-green mt-1">STATUS: ACTIVE</div>
+                    </div>
+                </div>
+
+                <!-- Lab Data Section -->
+                <div class="p-5 bg-space-gray">
+                    <!-- Data Grid -->
+                    <div class="space-y-3 mb-5">
+
+                        <!-- Size Data -->
+                        <div
+                            class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-neon-green border-opacity-30">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-neon-green text-lg font-bold">SIZE</span>
+                            </div>
+                            <div class="text-neon-green font-black">{{ obj.diameter }}m</div>
+                        </div>
+
+                        <!-- Speed Data -->
+                        <div
+                            class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-hot-pink border-opacity-30">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-hot-pink text-lg font-bold">VELOCITY</span>
+                            </div>
+                            <div class="text-hot-pink font-black">{{ obj.speed }} km/s</div>
+                        </div>
+
+                        <!-- Distance Data -->
+                        <div
+                            class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-electric-blue border-opacity-30">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-electric-blue text-lg font-bold">DISTANCE</span>
+                            </div>
+                            <div class="text-electric-blue font-black">{{ obj.miss_distance }} LD</div>
+                        </div>
+
+                        <!-- Date Data -->
+                        <div
+                            class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-stellar-cyan border-opacity-30">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-stellar-cyan text-lg font-bold">FLYBY</span>
+                            </div>
+                            <div class="text-stellar-cyan font-black text-sm">{{ obj.date }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Investigation Button -->
+                    <form method="post" action="/neo-details/" class="w-full">
+                        {% csrf_token %}
+                        <input type="hidden" name="name" value="{{ obj.name }}">
+                        <input type="hidden" name="diameter" value="{{ obj.diameter }}">
+                        <input type="hidden" name="speed" value="{{ obj.speed }}">
+                        <input type="hidden" name="miss_distance" value="{{ obj.miss_distance }}">
+                        <input type="hidden" name="date" value="{{ obj.date }}">
+                        <button type="submit"
+                            class="w-full bg-gradient-to-r from-cosmic-purple to-hot-pink hover:from-hot-pink hover:to-electric-blue text-white py-3 px-4 rounded-xl font-black text-sm transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-105 relative overflow-hidden group">
+                            <!-- Button background effect -->
+                            <div
+                                class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500">
+                            </div>
+                            <div class="relative z-10 flex items-center justify-center space-x-2">
+                                <span>INVESTIGATE SPECIMEN</span>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Cool corner badge -->
+                <div
+                    class="absolute top-0 left-0 bg-neon-green text-black text-xs font-black px-2 py-1 transform -rotate-45 -translate-x-3 translate-y-3">
+                    NEW
                 </div>
             </div>
             {% endfor %}
         </div>
+
+        <!-- EPIC Lab Report Footer -->
+        <section class="mt-16 relative">
+
+            <div
+                class="sketch-border sketch-border-purple bg-gradient-to-r from-space-gray to-space-blue p-8 rounded-3xl text-center relative z-10">
+                <div class="mb-6">
+                    <h3 class="text-4xl font-black text-white mb-4 holo-text"
+                        style="font-family: 'Orbitron', monospace;">
+                        EXPERIMENT COMPLETE!
+                    </h3>
+                    <div class="max-w-3xl mx-auto">
+                        <p class="text-lg text-gray-300 mb-4 font-bold">
+                            <span class="text-neon-green">HYPOTHESIS CONFIRMED:</span>
+                            Space rocks are absolutely MIND-BLOWING!
+                        </p>
+                        <p class="text-base text-gray-400">
+                            These cosmic specimens have traveled millions of miles through the vacuum of space,
+                            survived cosmic radiation, and are now performing precision flybys of Earth!
+                            Each one is a time capsule from the early solar system!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Cool science facts grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                    <div class="bg-space-black p-4 rounded-xl border-2 border-neon-green border-opacity-50">
+                        <div class="text-neon-green font-black text-sm">ANCIENT ARTIFACTS</div>
+                        <div class="text-gray-300 text-xs mt-1">4.6 billion years old!</div>
+                    </div>
+                    <div class="bg-space-black p-4 rounded-xl border-2 border-hot-pink border-opacity-50">
+                        <div class="text-hot-pink font-black text-sm">SPEED DEMONS</div>
+                        <div class="text-gray-300 text-xs mt-1">Faster than rockets!</div>
+                    </div>
+                    <div class="bg-space-black p-4 rounded-xl border-2 border-electric-blue border-opacity-50">
+                        <div class="text-electric-blue font-black text-sm">100% SAFE</div>
+                        <div class="text-gray-300 text-xs mt-1">Earth is protected!</div>
+                    </div>
+                </div>
+
+                <!-- Lab signature -->
+                <div class="mt-8 text-center">
+                    <div class="text-sm text-gray-400 font-bold">
+                        Lab Report Compiled by: <span class="text-electric-blue">COSMIC SENTINEL AI</span>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">
+                        Keep exploring, space cadet! The universe is waiting!
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
+
+    <!-- Cool JavaScript for extra interactivity -->
+    <script>
+        // Add smooth hover effects to cards
+        document.querySelectorAll('.sketch-border').forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                this.style.transform = 'scale(1.03) rotate(' + (Math.random() * 1 - 0.5) + 'deg)';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                this.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                this.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
+
+        // Smooth glitch effect for the title
+        setInterval(() => {
+            const title = document.querySelector('.holo-text');
+            if (title && Math.random() < 0.1) {
+                title.style.transition = 'text-shadow 0.3s ease-in-out';
+                title.style.textShadow = '2px 2px #ff1493, -2px -2px #00ffff';
+                setTimeout(() => {
+                    title.style.textShadow = 'none';
+                }, 200);
+            }
+        }, 3000);
+
+        // Smooth button hover effects
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mouseenter', function () {
+                this.style.transition = 'all 0.5s ease-in-out';
+            });
+        });
+
+        // Smooth navigation effects
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('mouseenter', function () {
+                this.style.transition = 'all 0.4s ease-in-out';
+            });
+        });
+    </script>
+
 </body>
 
 </html>
