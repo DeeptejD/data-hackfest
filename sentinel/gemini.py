@@ -20,7 +20,7 @@ Close approach date: {neo['date']}
 Be concise, simple, and slightly fun.
 """
 
-    model = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
+    model = genai.GenerativeModel(model_name="models/gemini-1.5-pro")
     response = model.generate_content(prompt)
 
     return response.text.strip()
@@ -45,7 +45,7 @@ DATE: [fun description about its visit date]
 Make them kid-friendly, funny, and use simple comparisons kids understand!
 """
 
-    model = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
+    model = genai.GenerativeModel(model_name="models/gemini-1.5-pro")
     response = model.generate_content(prompt)
     
     descriptions = {}
@@ -80,7 +80,7 @@ Respond as Astro in a fun, encouraging way. Keep it:
 If the question isn't about this asteroid or space, gently redirect to the asteroid topic.
 """
 
-    model = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
+    model = genai.GenerativeModel(model_name="models/gemini-1.5-pro")
     response = model.generate_content(prompt)
     
     return response.text.strip()

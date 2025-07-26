@@ -118,16 +118,34 @@ def save_favorite(request):
         user = request.session.get("user")
 
         if user and neo_name:
-            # Use get_or_create to prevent duplicates based on user_email and name
-            favorite, created = FavoriteNEO.objects.get_or_create(
-                user_email=user["email"],
-                name=neo_name,
-                defaults={
-                    'diameter': request.POST.get("diameter"),
-                    'speed': request.POST.get("speed"),
-                    'miss_distance': request.POST.get("miss_distance"),
-                    'date': request.POST.get("date"),
-                }
-            )
+            try:
+                # First, check if this favorite already exists
+                existing_favorite = FavoriteNEO.objects.filter(
+                    user_email=user["email"],
+                    name=neo_name
+                ).first()
+                
+                if existing_favorite:
+                    # Update existing record instead of creating duplicate
+                    existing_favorite.diameter = request.POST.get("diameter")
+                    existing_favorite.speed = request.POST.get("speed") 
+                    existing_favorite.miss_distance = request.POST.get("miss_distance")
+                    existing_favorite.date = request.POST.get("date")
+                    existing_favorite.save()
+                else:
+                    # Create new favorite
+                    FavoriteNEO.objects.create(
+                        user_email=user["email"],
+                        name=neo_name,
+                        diameter=request.POST.get("diameter"),
+                        speed=request.POST.get("speed"),
+                        miss_distance=request.POST.get("miss_distance"),
+                        date=request.POST.get("date"),
+                    )
+            except Exception as e:
+                # Handle any database errors gracefully
+                print(f"Error saving favorite: {e}")
+                # Continue to redirect even if there's an error
+                
     return redirect("/neos")
 

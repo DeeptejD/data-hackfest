@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ neo.name }} - Space Rock Explorer!</title>
+    <title>{{ neo.name }} - Specimen Analysis Chamber</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -15,31 +15,212 @@
                         'space-gray': '#1a1a2e',
                         'space-blue': '#16213e',
                         'cosmic-purple': '#6366f1',
-                        'stellar-cyan': '#06b6d4'
+                        'stellar-cyan': '#06b6d4',
+                        'neon-green': '#39ff14',
+                        'electric-blue': '#00ffff',
+                        'hot-pink': '#ff1493'
                     }
                 }
             }
         }
     </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap');
+
+        /* Hand-drawn pencil border effect */
+        .sketch-border {
+            position: relative;
+            border: none;
+        }
+
+        .sketch-border::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: transparent;
+            border: 2px solid #39ff14;
+            border-radius: 15px;
+            filter: url(#roughen);
+            animation: sketch-glow 3s ease-in-out infinite alternate;
+        }
+
+        .sketch-border-purple::before {
+            border-color: #ff1493;
+        }
+
+        .sketch-border-cyan::before {
+            border-color: #00ffff;
+        }
+
+        @keyframes sketch-glow {
+            0% {
+                filter: drop-shadow(0 0 5px currentColor);
+                transform: rotate(-0.5deg);
+            }
+
+            100% {
+                filter: drop-shadow(0 0 15px currentColor);
+                transform: rotate(0.5deg);
+            }
+        }
+
+        /* Science lab notebook lines */
+        .lab-notes {
+            background-image:
+                linear-gradient(90deg, #ff1493 0%, transparent 1%),
+                linear-gradient(0deg, rgba(57, 255, 20, 0.1) 0%, transparent 1%);
+            background-size: 20px 20px;
+        }
+
+        /* Retro CRT screen effect */
+        .crt-screen {
+            background: linear-gradient(180deg,
+                    transparent 50%,
+                    rgba(0, 255, 255, 0.03) 50%);
+            background-size: 100% 4px;
+            animation: crt-flicker 0.15s infinite linear;
+        }
+
+        @keyframes crt-flicker {
+            0% {
+                opacity: 1;
+            }
+
+            98% {
+                opacity: 1;
+            }
+
+            99% {
+                opacity: 0.98;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Smooth hover transitions */
+        .smooth-hover {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .smooth-hover:hover {
+            transform: scale(1.03) rotate(1deg);
+        }
+
+        /* Cool holographic text effect */
+        .holo-text {
+            background: linear-gradient(45deg, #39ff14, #00ffff, #ff1493, #6366f1);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: holo-shift 3s ease-in-out infinite;
+        }
+
+        @keyframes holo-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Space background for specimen chamber */
+        .space-bg {
+            background: radial-gradient(ellipse at center, #2d1b69 0%, #0f0c29 30%, #000000 70%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .space-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                radial-gradient(1px 1px at 20px 30px, white, transparent),
+                radial-gradient(1px 1px at 40px 70px, white, transparent),
+                radial-gradient(2px 2px at 90px 40px, white, transparent),
+                radial-gradient(1px 1px at 130px 80px, white, transparent),
+                radial-gradient(2px 2px at 160px 30px, white, transparent);
+            background-repeat: repeat;
+            background-size: 250px 120px;
+            animation: twinkle 8s ease-in-out infinite alternate;
+            opacity: 0.6;
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 0.8;
+            }
+        }
+    </style>
+
+    <!-- SVG Filters for rough pencil effect -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <defs>
+            <filter id="roughen">
+                <feTurbulence baseFrequency="0.04" numOctaves="3" result="noise" seed="1" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+            </filter>
+        </defs>
+    </svg>
 </head>
 
-<body class="bg-space-black min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-space-gray border-b border-space-blue">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+<body class="bg-space-black min-h-screen crt-screen lab-notes" style="font-family: 'Space Mono', monospace;">
+    <!-- Cool Navigation Lab Style -->
+    <nav class="bg-space-gray relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex items-center justify-between h-20">
                 <div class="flex items-center space-x-8">
-                    <h1 class="text-2xl font-bold text-white">Cosmic Sentinel</h1>
-                    <div class="hidden md:flex space-x-6">
-                        <a href="/" class="text-gray-300 hover:text-white transition-colors duration-200">Home</a>
-                        <a href="/neos" class="text-cosmic-purple font-medium">NEOs</a>
+                    <!-- Cool logo -->
+                    <div class="flex items-center space-x-3">
+                        <h1 class="text-2xl font-black holo-text" style="font-family: 'Orbitron', monospace;">
+                            COSMIC SENTINEL
+                        </h1>
+                    </div>
+
+                    <!-- Navigation Links -->
+                    <div class="hidden md:flex space-x-8">
+                        <a href="/"
+                            class="text-gray-300 hover:text-neon-green smooth-hover transition-colors duration-200 font-bold relative group">
+                            Home
+                            <span
+                                class="absolute -bottom-1 left-0 w-0 h-0.5 bg-neon-green group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                        <a href="/neos" class="text-electric-blue font-black relative smooth-hover">
+                            NEOs
+                            <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-electric-blue"></span>
+                        </a>
                         <a href="/neos/favorites"
-                            class="text-gray-300 hover:text-white transition-colors duration-200">Favorites</a>
+                            class="text-gray-300 hover:text-hot-pink smooth-hover transition-colors duration-200 font-bold relative group">
+                            Favorites
+                            <span
+                                class="absolute -bottom-1 left-0 w-0 h-0.5 bg-hot-pink group-hover:w-full transition-all duration-300"></span>
+                        </a>
                     </div>
                 </div>
+
+                <!-- User Info -->
                 <div class="flex items-center space-x-4">
-                    <span class="text-gray-300">{{ user.name }}</span>
-                    <a href="/logout" class="text-red-400 hover:text-red-300 transition-colors duration-200">
+                    <div class="text-neon-green font-bold">{{ user.name }}</div>
+                    <a href="/logout"
+                        class="text-red-400 hover:text-red-300 smooth-hover transition-colors duration-200 font-bold">
                         Logout
                     </a>
                 </div>
@@ -47,209 +228,265 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32">
-        <!-- Header with Back Button -->
-        <div class="mb-8">
-            <a href="/neos"
-                class="inline-flex items-center text-stellar-cyan hover:text-cyan-300 font-medium mb-4 transition-colors duration-200">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-                Back to Space Rocks
-            </a>
-            <h1 class="text-4xl font-bold text-white mb-2">{{ neo.name }}</h1>
-            <p class="text-xl text-gray-400">Meet this amazing space visitor!</p>
-        </div>
+    <!-- SPECIMEN ANALYSIS CHAMBER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-        <div class="grid lg:grid-cols-3 gap-8">
-            <!-- Main Info Card -->
+        <!-- Lab Header Section -->
+        <section class="relative py-12 overflow-hidden">
+            <div class="space-bg p-8 rounded-3xl relative">
+                <div class="text-center relative z-10">
+                    <!-- Back Button -->
+                    <div class="mb-6">
+                        <a href="/neos"
+                            class="inline-flex items-center text-electric-blue hover:text-neon-green smooth-hover font-bold transition-colors duration-300 bg-space-black bg-opacity-50 px-4 py-2 rounded-xl">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            RETURN TO SPECIMEN VAULT
+                        </a>
+                    </div>
+
+                    <!-- Main Title -->
+                    <h1 class="text-5xl font-black mb-4 holo-text" style="font-family: 'Orbitron', monospace;">
+                        SPECIMEN ANALYSIS
+                    </h1>
+                    <div class="text-3xl text-white font-bold mb-2">
+                        <span class="text-neon-green">SUBJECT:</span>
+                        <span class="text-electric-blue">{{ neo.name }}</span>
+                    </div>
+                    <p class="text-lg text-gray-300 max-w-2xl mx-auto">
+                        Welcome to the Deep Space Analysis Chamber! This cosmic specimen is ready for investigation.
+                    </p>
+
+                    <!-- Favorite Button in Header -->
+                    <div class="mt-6">
+                        <form action="/save_favorite/" method="post" class="inline-block">
+                            {% csrf_token %}
+                            <input type="hidden" name="name" value="{{ neo.name }}">
+                            <input type="hidden" name="diameter" value="{{ neo.diameter }}">
+                            <input type="hidden" name="speed" value="{{ neo.speed }}">
+                            <input type="hidden" name="miss_distance" value="{{ neo.miss_distance }}">
+                            <input type="hidden" name="date" value="{{ neo.date }}">
+                            <button type="submit" title="Add specimen to collection"
+                                class="bg-hot-pink hover:bg-neon-green text-white px-6 py-3 rounded-xl font-black smooth-hover transition-all duration-500 border-2 border-electric-blue hover:border-hot-pink">
+                                <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                    </path>
+                                </svg>
+                                ADD TO COLLECTION
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid lg:grid-cols-3 gap-8 mt-12">
+            <!-- Main Analysis Report -->
             <div class="lg:col-span-2">
-                <!-- Header Card -->
-                <div class="bg-space-gray border border-space-blue rounded-2xl p-8 mb-8">
-                    <div class="flex items-center justify-between mb-6">
-                        <div>
-                            <h2 class="text-3xl font-bold text-white mb-2">{{ neo.name }}</h2>
-                            <p class="text-xl text-gray-400">A Cosmic Traveler</p>
-                        </div>
-                        <div class="text-right">
-                            <!-- Favorite Button -->
-                            <form action="/save_favorite/" method="post" class="inline-block">
-                                {% csrf_token %}
-                                <input type="hidden" name="name" value="{{ neo.name }}">
-                                <input type="hidden" name="diameter" value="{{ neo.diameter }}">
-                                <input type="hidden" name="speed" value="{{ neo.speed }}">
-                                <input type="hidden" name="miss_distance" value="{{ neo.miss_distance }}">
-                                <input type="hidden" name="date" value="{{ neo.date }}">
-                                <button type="submit"
-                                    class="bg-cosmic-purple hover:bg-indigo-600 rounded-full p-3 transition-all duration-200 group"
-                                    title="Add to favorites">
-                                    <svg class="w-6 h-6 text-white group-hover:text-red-300 transition-colors duration-200"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                        </path>
-                                    </svg>
-                                </button>
-                            </form>
+                <!-- Specimen Data Header -->
+                <div class="sketch-border bg-space-gray rounded-2xl p-8 mb-8 smooth-hover">
+                    <div class="text-center mb-6">
+                        <div class="text-sm text-electric-blue font-bold mb-2">SPECIMEN DESIGNATION</div>
+                        <h2 class="text-3xl font-black text-white mb-2" style="font-family: 'Orbitron', monospace;">{{
+                            neo.name }}</h2>
+                        <div class="text-neon-green font-bold">STATUS: ACTIVE TRACKING</div>
+                    </div>
+
+                    <!-- AI Summary Section -->
+                    <div class="bg-space-black p-6 rounded-xl border-2 border-hot-pink border-opacity-30">
+                        <h3 class="text-xl font-black text-hot-pink mb-4">DR. ASTRO'S ANALYSIS REPORT</h3>
+                        <div class="text-gray-300 leading-relaxed">
+                            {{ summary|default:"This specimen is currently under deep space analysis. Preliminary data
+                            suggests fascinating cosmic properties worth investigating!" }}
                         </div>
                     </div>
                 </div>
 
-                <!-- Fun Facts Grid -->
+                <!-- Lab Data Analysis Grid -->
                 <div class="grid md:grid-cols-2 gap-6 mb-8">
-                    <div
-                        class="bg-space-gray border border-space-blue rounded-xl p-6 hover:border-cosmic-purple transition-colors duration-300">
+                    <!-- Size Analysis -->
+                    <div class="sketch-border bg-space-gray rounded-xl p-6 smooth-hover">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-cosmic-purple rounded-full flex items-center justify-center mr-4">
-                                <span class="text-2xl">🚀</span>
+                            <div
+                                class="w-12 h-12 bg-neon-green bg-opacity-20 rounded-full flex items-center justify-center mr-4 border-2 border-neon-green">
+                                <span class="text-2xl">�</span>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white">How Big Is It?</h3>
-                                <p class="text-gray-400">Size matters in space!</p>
+                                <h3 class="text-lg font-black text-neon-green">DIAMETER ANALYSIS</h3>
+                                <p class="text-gray-400 text-sm">Specimen size measurement</p>
                             </div>
                         </div>
-                        <p class="text-3xl font-bold text-cosmic-purple mb-2">{{ neo.diameter }}m</p>
-                        <p class="text-gray-300">{{ descriptions.size|default:"That's one amazing space rock!" }}</p>
+                        <p class="text-4xl font-black text-neon-green mb-3">{{ neo.diameter }}m</p>
+                        <div class="bg-space-black p-3 rounded-lg border border-neon-green border-opacity-30">
+                            <p class="text-gray-300 text-sm">{{ descriptions.size|default:"This specimen shows
+                                remarkable dimensional characteristics worthy of further study!" }}</p>
+                        </div>
                     </div>
 
-                    <div
-                        class="bg-space-gray border border-space-blue rounded-xl p-6 hover:border-stellar-cyan transition-colors duration-300">
+                    <!-- Velocity Analysis -->
+                    <div class="sketch-border sketch-border-purple bg-space-gray rounded-xl p-6 smooth-hover">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-stellar-cyan rounded-full flex items-center justify-center mr-4">
+                            <div
+                                class="w-12 h-12 bg-hot-pink bg-opacity-20 rounded-full flex items-center justify-center mr-4 border-2 border-hot-pink">
                                 <span class="text-2xl">⚡</span>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white">Super Speed!</h3>
-                                <p class="text-gray-400">Zooming through space</p>
+                                <h3 class="text-lg font-black text-hot-pink">VELOCITY ANALYSIS</h3>
+                                <p class="text-gray-400 text-sm">Speed through space-time</p>
                             </div>
                         </div>
-                        <p class="text-3xl font-bold text-stellar-cyan mb-2">{{ neo.speed }} km/s</p>
-                        <p class="text-gray-300">{{ descriptions.speed|default:"That's way faster than any rocket!" }}
-                        </p>
+                        <p class="text-4xl font-black text-hot-pink mb-3">{{ neo.speed }} km/s</p>
+                        <div class="bg-space-black p-3 rounded-lg border border-hot-pink border-opacity-30">
+                            <p class="text-gray-300 text-sm">{{ descriptions.speed|default:"Incredible velocity
+                                readings! This specimen moves faster than any terrestrial vehicle!" }}</p>
+                        </div>
                     </div>
 
-                    <div
-                        class="bg-space-gray border border-space-blue rounded-xl p-6 hover:border-yellow-500 transition-colors duration-300">
+                    <!-- Distance Analysis -->
+                    <div class="sketch-border sketch-border-cyan bg-space-gray rounded-xl p-6 smooth-hover">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mr-4">
+                            <div
+                                class="w-12 h-12 bg-electric-blue bg-opacity-20 rounded-full flex items-center justify-center mr-4 border-2 border-electric-blue">
                                 <span class="text-2xl">🌍</span>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white">Safe Distance</h3>
-                                <p class="text-gray-400">How close will it get?</p>
+                                <h3 class="text-lg font-black text-electric-blue">PROXIMITY ANALYSIS</h3>
+                                <p class="text-gray-400 text-sm">Safe distance measurement</p>
                             </div>
                         </div>
-                        <p class="text-3xl font-bold text-yellow-500 mb-2">{{ neo.miss_distance }} LD</p>
-                        <p class="text-gray-300">{{ descriptions.distance|default:"LD means 'Lunar Distance' - the
-                            distance to our Moon!" }}</p>
+                        <p class="text-4xl font-black text-electric-blue mb-3">{{ neo.miss_distance }} LD</p>
+                        <div class="bg-space-black p-3 rounded-lg border border-electric-blue border-opacity-30">
+                            <p class="text-gray-300 text-sm">{{ descriptions.distance|default:"LD = Lunar Distance
+                                (distance to Moon). This specimen maintains a perfectly safe trajectory!" }}</p>
+                        </div>
                     </div>
 
-                    <div
-                        class="bg-space-gray border border-space-blue rounded-xl p-6 hover:border-green-500 transition-colors duration-300">
+                    <!-- Temporal Analysis -->
+                    <div class="sketch-border bg-space-gray rounded-xl p-6 smooth-hover">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
+                            <div
+                                class="w-12 h-12 bg-stellar-cyan bg-opacity-20 rounded-full flex items-center justify-center mr-4 border-2 border-stellar-cyan">
                                 <span class="text-2xl">📅</span>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white">Visit Date</h3>
-                                <p class="text-gray-400">When it says hello to Earth</p>
+                                <h3 class="text-lg font-black text-stellar-cyan">ENCOUNTER TIMELINE</h3>
+                                <p class="text-gray-400 text-sm">Optimal observation window</p>
                             </div>
                         </div>
-                        <p class="text-xl font-bold text-green-500 mb-2">{{ neo.date }}</p>
-                        <p class="text-gray-300">{{ descriptions.date|default:"Mark it on your calendar!" }}</p>
+                        <p class="text-2xl font-black text-stellar-cyan mb-3">{{ neo.date }}</p>
+                        <div class="bg-space-black p-3 rounded-lg border border-stellar-cyan border-opacity-30">
+                            <p class="text-gray-300 text-sm">{{ descriptions.date|default:"Mark this date! Perfect
+                                opportunity for astronomical observation and data collection!" }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Sidebar -->
+            <!-- Lab Research Sidebar -->
             <div class="space-y-6">
-                <!-- Fun Learning Card -->
-                <div class="bg-space-gray border border-space-blue rounded-xl p-6">
-                    <h3 class="text-xl font-bold text-white mb-4">🎓 Did You Know?</h3>
+                <!-- Research Notes -->
+                <div class="sketch-border sketch-border-purple bg-space-gray rounded-xl p-6 smooth-hover">
+                    <h3 class="text-xl font-black text-hot-pink mb-4" style="font-family: 'Orbitron', monospace;">
+                        RESEARCH NOTES</h3>
                     <div class="space-y-4 text-sm">
-                        <div class="flex items-start">
+                        <div
+                            class="flex items-start bg-space-black p-3 rounded-lg border border-neon-green border-opacity-30">
                             <span class="text-2xl mr-3">🌟</span>
                             <div>
-                                <p class="text-white font-semibold">Asteroids are leftovers!</p>
-                                <p class="text-gray-400">They're pieces from when our solar system was forming 4.6
-                                    billion years ago!</p>
+                                <p class="text-neon-green font-bold">Ancient Cosmic Artifacts!</p>
+                                <p class="text-gray-300">These specimens are 4.6 billion year old remnants from our
+                                    solar system's formation!</p>
                             </div>
                         </div>
-                        <div class="flex items-start">
-                            <span class="text-2xl mr-3">🏃</span>
+                        <div
+                            class="flex items-start bg-space-black p-3 rounded-lg border border-hot-pink border-opacity-30">
+                            <span class="text-2xl mr-3">🚀</span>
                             <div>
-                                <p class="text-white font-semibold">They're super fast!</p>
-                                <p class="text-gray-400">Most asteroids travel at speeds of 25 km per second - that's
-                                    90,000 km per hour!</p>
+                                <p class="text-hot-pink font-bold">Incredible Velocities!</p>
+                                <p class="text-gray-300">Moving at speeds up to 25 km/s - that's 90,000 km per hour
+                                    through space!</p>
                             </div>
                         </div>
-                        <div class="flex items-start">
-                            <span class="text-2xl mr-3">🔭</span>
+                        <div
+                            class="flex items-start bg-space-black p-3 rounded-lg border border-electric-blue border-opacity-30">
+                            <span class="text-2xl mr-3">�️</span>
                             <div>
-                                <p class="text-white font-semibold">We watch them closely!</p>
-                                <p class="text-gray-400">Scientists track over 25,000 near-Earth asteroids to keep us
-                                    safe!</p>
+                                <p class="text-electric-blue font-bold">Earth Protection Protocol!</p>
+                                <p class="text-gray-300">Over 25,000 Near-Earth Objects are tracked continuously for
+                                    planetary safety!</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
+                <!-- Lab Navigation -->
                 <div class="space-y-4">
                     <a href="/neos"
-                        class="block w-full bg-cosmic-purple hover:bg-indigo-600 text-white py-4 px-6 rounded-xl font-bold text-center transition-colors duration-200">
-                        🚀 Explore More Space Rocks!
+                        class="block w-full bg-gradient-to-r from-cosmic-purple to-hot-pink hover:from-hot-pink hover:to-electric-blue text-white py-4 px-6 rounded-xl font-black text-center smooth-hover transition-all duration-500">
+                        � RETURN TO SPECIMEN VAULT
                     </a>
                     <a href="/neos/favorites"
-                        class="block w-full bg-stellar-cyan hover:bg-cyan-600 text-white py-4 px-6 rounded-xl font-bold text-center transition-colors duration-200">
-                        ⭐ My Favorite Asteroids
+                        class="block w-full bg-gradient-to-r from-neon-green to-electric-blue hover:from-electric-blue hover:to-stellar-cyan text-black hover:text-white py-4 px-6 rounded-xl font-black text-center smooth-hover transition-all duration-500">
+                        ⭐ MY SPECIMEN COLLECTION
                     </a>
                 </div>
 
-                <!-- Safety Message -->
-                <div class="bg-green-900 bg-opacity-50 border border-green-600 rounded-xl p-4">
-                    <div class="flex items-center mb-2">
-                        <span class="text-2xl mr-2">🛡️</span>
-                        <h4 class="text-green-400 font-bold">Earth is Safe!</h4>
+                <!-- Safety Protocol Badge -->
+                <div class="sketch-border sketch-border-cyan bg-space-gray rounded-xl p-4 smooth-hover">
+                    <div class="text-center">
+                        <div
+                            class="w-16 h-16 bg-electric-blue bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3 border-2 border-electric-blue">
+                            <span class="text-3xl">🛡️</span>
+                        </div>
+                        <h4 class="text-electric-blue font-black mb-2">EARTH PROTECTION ACTIVE</h4>
+                        <p class="text-gray-300 text-sm">All specimens maintain safe trajectories. No threat detected to
+                            planetary systems!</p>
+                        <div class="mt-3 bg-electric-blue bg-opacity-10 p-2 rounded-lg">
+                            <div class="text-electric-blue font-bold text-xs">STATUS: SECURE</div>
+                        </div>
                     </div>
-                    <p class="text-green-300 text-sm">Don't worry! Scientists make sure all these space rocks will pass
-                        by Earth safely. We're just watching them because they're cool!</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Astro Chat Bot -->
+    <!-- DR. ASTRO AI ASSISTANT -->
     <div class="fixed bottom-6 right-6 z-50">
         <!-- Chat Toggle Button -->
         <div id="chatToggle"
-            class="bg-cosmic-purple hover:bg-indigo-600 rounded-full p-4 shadow-2xl cursor-pointer transition-all duration-300 border-4 border-stellar-cyan animate-pulse">
-            <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+            class="sketch-border bg-space-gray hover:bg-hot-pink rounded-full p-4 shadow-2xl cursor-pointer smooth-hover border-4 border-neon-green hover:border-electric-blue">
+            <div class="flex items-center space-x-3">
+                <div
+                    class="w-10 h-10 bg-neon-green rounded-full flex items-center justify-center border-2 border-electric-blue">
                     <span class="text-xl">🤖</span>
                 </div>
-                <span class="text-white font-bold hidden sm:inline">Chat with Astro!</span>
+                <span class="text-white font-black hidden sm:inline" style="font-family: 'Orbitron', monospace;">DR.
+                    ASTRO AI</span>
             </div>
         </div>
 
         <!-- Chat Window -->
         <div id="chatWindow"
-            class="hidden absolute bottom-20 right-0 w-80 sm:w-96 bg-space-gray border-2 border-cosmic-purple rounded-2xl shadow-2xl">
+            class="hidden absolute bottom-20 right-0 w-80 sm:w-96 sketch-border bg-space-gray rounded-2xl shadow-2xl">
             <!-- Chat Header -->
-            <div class="bg-cosmic-purple p-4 rounded-t-xl">
-                <div class="flex items-center justify-between">
+            <div class="space-bg p-4 rounded-t-xl relative">
+                <div class="flex items-center justify-between relative z-10">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                        <div
+                            class="w-12 h-12 bg-neon-green rounded-full flex items-center justify-center border-2 border-electric-blue">
                             <span class="text-xl">🤖</span>
                         </div>
                         <div>
-                            <h3 class="text-white font-bold">Astro</h3>
-                            <p class="text-blue-200 text-sm">Your Space Buddy!</p>
+                            <h3 class="text-white font-black" style="font-family: 'Orbitron', monospace;">DR. ASTRO</h3>
+                            <p class="text-electric-blue text-sm font-bold">AI RESEARCH ASSISTANT</p>
                         </div>
                     </div>
-                    <button id="chatClose" class="text-white hover:text-gray-300 transition-colors">
+                    <button id="chatClose" class="text-white hover:text-hot-pink smooth-hover transition-colors"
+                        title="Close chat">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M6 18L18 6M6 6l12 12"></path>
@@ -259,21 +496,23 @@
             </div>
 
             <!-- Chat Messages -->
-            <div id="chatMessages" class="h-80 overflow-y-auto p-4 space-y-4">
+            <div id="chatMessages" class="h-80 overflow-y-auto p-4 space-y-4 bg-space-black rounded-none">
                 <!-- Initial Astro Message -->
                 <div class="flex items-start space-x-3">
-                    <div class="w-8 h-8 bg-cosmic-purple rounded-full flex items-center justify-center flex-shrink-0">
-                        <span class="text-white text-sm">🤖</span>
+                    <div
+                        class="w-8 h-8 bg-neon-green rounded-full flex items-center justify-center flex-shrink-0 border border-electric-blue">
+                        <span class="text-black text-sm font-bold">🤖</span>
                     </div>
-                    <div class="bg-space-blue rounded-lg p-3 max-w-xs">
-                        <p class="text-white text-sm">Hey there, space explorer! 🚀 I'm Astro, and I LOVE talking about
-                            {{ neo.name }}! What would you like to know about this amazing space rock?</p>
+                    <div class="bg-space-gray border border-neon-green border-opacity-50 rounded-lg p-3 max-w-xs">
+                        <p class="text-white text-sm font-bold">Greetings, fellow researcher! 🚀 I'm Dr. Astro, your AI
+                            lab assistant specializing in cosmic specimen analysis. Ready to explore the mysteries of {{
+                            neo.name }}? Ask me anything about this fascinating space rock!</p>
                     </div>
                 </div>
             </div>
 
             <!-- Chat Input -->
-            <div class="p-4 border-t border-space-blue">
+            <div class="p-4 border-t-2 border-neon-green bg-space-gray rounded-b-xl">
                 <form id="chatForm" class="flex space-x-2">
                     {% csrf_token %}
                     <input type="hidden" name="name" value="{{ neo.name }}">
@@ -282,11 +521,11 @@
                     <input type="hidden" name="miss_distance" value="{{ neo.miss_distance }}">
                     <input type="hidden" name="date" value="{{ neo.date }}">
                     <input type="text" id="chatInput" name="question"
-                        placeholder="Ask me anything about {{ neo.name }}!"
-                        class="flex-1 bg-space-black border border-space-blue rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-cosmic-purple"
+                        placeholder="Ask Dr. Astro about {{ neo.name }}..."
+                        class="flex-1 bg-space-black border-2 border-electric-blue rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-neon-green smooth-hover"
                         maxlength="200">
-                    <button type="submit"
-                        class="bg-cosmic-purple hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors duration-200">
+                    <button type="submit" title="Send message"
+                        class="bg-gradient-to-r from-neon-green to-electric-blue hover:from-hot-pink hover:to-neon-green text-black hover:text-white px-4 py-2 rounded-lg font-bold smooth-hover transition-all duration-500">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
@@ -306,10 +545,9 @@
         const chatInput = document.getElementById('chatInput');
         const chatMessages = document.getElementById('chatMessages');
 
-        // Toggle chat window
+        // Toggle chat window with smooth animation
         chatToggle.addEventListener('click', () => {
             chatWindow.classList.toggle('hidden');
-            chatToggle.classList.remove('animate-pulse');
         });
 
         chatClose.addEventListener('click', () => {
@@ -328,7 +566,7 @@
             chatInput.value = '';
 
             // Add loading message
-            const loadingDiv = addMessage('Astro is thinking... 🤔', 'astro', true);
+            const loadingDiv = addMessage('Dr. Astro is analyzing data... 🔬', 'astro', true);
 
             try {
                 const formData = new FormData(chatForm);
@@ -347,14 +585,14 @@
                 if (data.success) {
                     addMessage(data.response, 'astro');
                 } else {
-                    addMessage('Oops! Something went wrong. Try asking me something else! 🚀', 'astro');
+                    addMessage('Lab systems experiencing interference! Please try another inquiry! 🚀', 'astro');
                 }
             } catch (error) {
                 // Remove loading message
                 if (chatMessages.contains(loadingDiv)) {
                     chatMessages.removeChild(loadingDiv);
                 }
-                addMessage('Houston, we have a problem! Try again! 🛸', 'astro');
+                addMessage('Communication array malfunction! Attempting to reconnect... 🛸', 'astro');
             }
         });
 
@@ -365,20 +603,20 @@
             if (sender === 'user') {
                 messageDiv.innerHTML = `
                     <div class="flex-1"></div>
-                    <div class="bg-cosmic-purple rounded-lg p-3 max-w-xs">
-                        <p class="text-white text-sm">${text}</p>
+                    <div class="bg-hot-pink border border-electric-blue border-opacity-50 rounded-lg p-3 max-w-xs">
+                        <p class="text-white text-sm font-bold">${text}</p>
                     </div>
-                    <div class="w-8 h-8 bg-stellar-cyan rounded-full flex items-center justify-center flex-shrink-0">
-                        <span class="text-white text-sm">👨‍🚀</span>
+                    <div class="w-8 h-8 bg-electric-blue rounded-full flex items-center justify-center flex-shrink-0 border border-neon-green">
+                        <span class="text-black text-sm font-bold">👨‍🚀</span>
                     </div>
                 `;
             } else {
                 messageDiv.innerHTML = `
-                    <div class="w-8 h-8 bg-cosmic-purple rounded-full flex items-center justify-center flex-shrink-0">
-                        <span class="text-white text-sm">🤖</span>
+                    <div class="w-8 h-8 bg-neon-green rounded-full flex items-center justify-center flex-shrink-0 border border-electric-blue">
+                        <span class="text-black text-sm font-bold">🤖</span>
                     </div>
-                    <div class="bg-space-blue rounded-lg p-3 max-w-xs ${isLoading ? 'animate-pulse' : ''}">
-                        <p class="text-white text-sm">${text}</p>
+                    <div class="bg-space-gray border border-neon-green border-opacity-50 rounded-lg p-3 max-w-xs ${isLoading ? 'animate-pulse' : ''}">
+                        <p class="text-white text-sm font-bold">${text}</p>
                     </div>
                 `;
             }
@@ -387,6 +625,47 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
             return messageDiv;
         }
+
+        // Add smooth hover effects to all interactive elements
+        document.querySelectorAll('.smooth-hover').forEach(element => {
+            element.addEventListener('mouseenter', function () {
+                this.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+        });
+
+        // Smooth hover effects for sketch borders
+        document.querySelectorAll('.sketch-border').forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                this.style.transform = 'scale(1.02) rotate(' + (Math.random() * 0.5 - 0.25) + 'deg)';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                this.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                this.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
+
+        // Holographic text glitch effect
+        setInterval(() => {
+            const titles = document.querySelectorAll('.holo-text');
+            titles.forEach(title => {
+                if (Math.random() < 0.1) {
+                    title.style.transition = 'text-shadow 0.3s ease-in-out';
+                    title.style.textShadow = '2px 2px #ff1493, -2px -2px #00ffff';
+                    setTimeout(() => {
+                        title.style.textShadow = 'none';
+                    }, 200);
+                }
+            });
+        }, 3000);
+
+        // Smooth button hover effects
+        document.querySelectorAll('button, a').forEach(element => {
+            element.addEventListener('mouseenter', function () {
+                this.style.transition = 'all 0.5s ease-in-out';
+            });
+        });
     </script>
 
 </body>
