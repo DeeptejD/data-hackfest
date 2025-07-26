@@ -1,8 +1,131 @@
-<h1>Your Favorite Asteroids</h1>
-<ul>
-    {% for fav in favorites %}
-    <li><strong>{{ fav.name }}</strong> on {{ fav.date }}</li>
-    {% empty %}
-    <li>No favorites yet!</li>
-    {% endfor %}
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites - Cosmic Sentinel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'space-black': '#0a0a0f',
+                        'space-gray': '#1a1a2e',
+                        'space-blue': '#16213e',
+                        'cosmic-purple': '#6366f1',
+                        'stellar-cyan': '#06b6d4'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-space-black min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-space-gray border-b border-space-blue">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <h1 class="text-2xl font-bold text-white">Cosmic Sentinel</h1>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="/" class="text-gray-300 hover:text-white transition-colors duration-200">Home</a>
+                        <a href="/neos" class="text-gray-300 hover:text-white transition-colors duration-200">NEOs</a>
+                        <a href="/neos/favorites" class="text-stellar-cyan font-medium">Favorites</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-300">{{ user.name }}</span>
+                    <a href="/logout" class="text-red-400 hover:text-red-300 transition-colors duration-200">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-white mb-2">My Favorites</h2>
+            <p class="text-gray-400">Your saved and tracked Near-Earth Objects</p>
+        </div>
+
+        {% if favorites %}
+        <!-- Favorites Grid -->
+        <div class="grid gap-6">
+            {% for fav in favorites %}
+            <div
+                class="bg-space-gray border border-space-blue rounded-lg p-6 hover:border-stellar-cyan transition-colors duration-300">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                    <div class="flex-1">
+                        <div class="flex items-center mb-4">
+                            <div class="w-3 h-3 bg-stellar-cyan rounded-full mr-3"></div>
+                            <h3 class="text-xl font-semibold text-white">{{ fav.name }}</h3>
+                        </div>
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                            <div>
+                                <span class="text-gray-400">Size</span>
+                                <p class="text-white font-medium">{{ fav.diameter }} m</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400">Speed</span>
+                                <p class="text-white font-medium">{{ fav.speed }} km/s</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400">Distance</span>
+                                <p class="text-white font-medium">{{ fav.miss_distance }} LD</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-400">Date</span>
+                                <p class="text-white font-medium">{{ fav.date }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 lg:mt-0 lg:ml-6">
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-stellar-cyan bg-opacity-20 text-stellar-cyan border border-stellar-cyan border-opacity-30">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z">
+                                </path>
+                            </svg>
+                            Favorited
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-16">
+            <div class="bg-space-gray border border-space-blue rounded-lg p-12 max-w-md mx-auto">
+                <div
+                    class="w-20 h-20 bg-stellar-cyan bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-stellar-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-white mb-4">No favorites yet</h3>
+                <p class="text-gray-400 mb-8">
+                    Start exploring Near-Earth Objects and save your favorites for quick access.
+                </p>
+                <a href="/neos"
+                    class="inline-block bg-cosmic-purple hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+                    Explore NEOs
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </main>
+</body>
+
+</html>

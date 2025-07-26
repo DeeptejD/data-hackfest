@@ -20,8 +20,15 @@ oauth.register(
     server_metadata_url=f'https://{os.getenv("AUTH0_DOMAIN")}/.well-known/openid-configuration',
 )
 
+def home(request):
+    user = request.session.get('user')
+    return render(request, 'sentinel/home.html', context={'user': user})
+
 def index(request):
     user = request.session.get('user')
+    if not user:
+        return redirect("/")
+    
     neos = fetch_neos()
     return render(request, 'sentinel/index.html', context={'user': user, 'neos': neos})
 
@@ -66,7 +73,7 @@ def favorites(request):
         return redirect("/")
 
     favs = FavoriteNEO.objects.filter(user_email=user["email"])
-    return render(request, "sentinel/favorites.html", {"favorites": favs})
+    return render(request, "sentinel/favorites.html", {"favorites": favs, "user": user})
 
 @csrf_exempt
 def save_favorite(request):
@@ -86,5 +93,5 @@ def save_favorite(request):
                     'date': request.POST.get("date"),
                 }
             )
-    return redirect("/")
+    return redirect("/neos")
 

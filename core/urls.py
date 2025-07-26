@@ -25,6 +25,7 @@ urlpatterns = [
     path('callback/', views.callback, name='callback'),
     path('summary/', views.summary, name='summary'),
     path("save_favorite/", views.save_favorite, name="save_favorite"),
-    path("favorites/", views.favorites, name="favorites"),
-    path('', views.index, name='index'),
+    path("neos/favorites/", views.favorites, name="favorites"),
+    path("neos/", views.index, name="neos"),
+    path('', views.home, name='home'),
 ]
