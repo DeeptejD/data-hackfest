@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from .nasa import fetch_neos
 from django.views.decorators.csrf import csrf_exempt
 from .gemini import summarize_asteroid
+from .models import FavoriteNEO
+
 
 oauth = OAuth()
 oauth.register(
@@ -58,4 +60,31 @@ def summary(request):
         return render(request, 'sentinel/summary.html', {"summary": summary_text, "neo": neo})
     return redirect('/')
 
-# Create your views here.
+def favorites(request):
+    user = request.session.get("user")
+    if not user:
+        return redirect("/")
+
+    favs = FavoriteNEO.objects.filter(user_email=user["email"])
+    return render(request, "sentinel/favorites.html", {"favorites": favs})
+
+@csrf_exempt
+def save_favorite(request):
+    if request.method == "POST":
+        neo_name = request.POST.get("name")
+        user = request.session.get("user")
+
+        if user and neo_name:
+            # Use get_or_create to prevent duplicates based on user_email and name
+            favorite, created = FavoriteNEO.objects.get_or_create(
+                user_email=user["email"],
+                name=neo_name,
+                defaults={
+                    'diameter': request.POST.get("diameter"),
+                    'speed': request.POST.get("speed"),
+                    'miss_distance': request.POST.get("miss_distance"),
+                    'date': request.POST.get("date"),
+                }
+            )
+    return redirect("/")
+

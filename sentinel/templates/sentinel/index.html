@@ -13,6 +13,17 @@
         Distance: {{ obj.miss_distance }} lunar distances<br>
         Date: {{ obj.date }}
     </li>
+    <!-- FAVORITE BUTTON -->
+    <form action="/save_favorite/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="name" value="{{ obj.name }}">
+        <input type="hidden" name="diameter" value="{{ obj.diameter }}">
+        <input type="hidden" name="speed" value="{{ obj.speed }}">
+        <input type="hidden" name="miss_distance" value="{{ obj.miss_distance }}">
+        <input type="hidden" name="date" value="{{ obj.date }}">
+        <button type="submit">Save</button>
+    </form>
+    <!-- SUMMARY BUTTON -->
     <form method="post" action="/summary/">
         {% csrf_token %}
         <input type="hidden" name="name" value="{{ obj.name }}">

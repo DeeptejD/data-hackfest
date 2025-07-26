@@ -20,9 +20,11 @@ from sentinel import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
     path('login/', views.login, name='login'),
-    path('callback/', views.callback, name='callback'),
     path('logout/', views.logout, name='logout'),
+    path('callback/', views.callback, name='callback'),
     path('summary/', views.summary, name='summary'),
+    path("save_favorite/", views.save_favorite, name="save_favorite"),
+    path("favorites/", views.favorites, name="favorites"),
+    path('', views.index, name='index'),
 ]

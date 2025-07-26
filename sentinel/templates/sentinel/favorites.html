@@ -1,0 +1,8 @@
+<h1>Your Favorite Asteroids</h1>
+<ul>
+    {% for fav in favorites %}
+    <li><strong>{{ fav.name }}</strong> on {{ fav.date }}</li>
+    {% empty %}
+    <li>No favorites yet!</li>
+    {% endfor %}
+</ul>
