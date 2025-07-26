@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cosmic Sentinel</title>
+</head>
+
+<body>
+    {% if user %}
+    <h2>Welcome, {{ user.name }}!</h2>
+    <p>Email: {{ user.email }}</p>
+    <a href="/logout">Logout</a>
+    {% else %}
+    <h2>Welcome to Cosmic Sentinel</h2>
+    <a href="/login">Login with Auth0</a>
+    {% endif %}
+</body>
+
+</html>
