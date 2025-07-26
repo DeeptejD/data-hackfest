@@ -5,7 +5,7 @@ from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect, JsonResponse
 from .nasa import fetch_neos
 from django.views.decorators.csrf import csrf_exempt
-from .gemini import summarize_asteroid, generate_fun_descriptions, chat_with_astro
+from .gemini import summarize_asteroid, generate_fun_descriptions, chat_with_quackstronaut
 from .models import FavoriteNEO
 
 
@@ -113,7 +113,7 @@ def neo_details(request):
 
 # an endpoint that take takes neo details and a question and returns a json response from gemini
 @csrf_exempt
-def chat_astro(request):
+def chat_quackstronaut(request):
     if request.method == "POST":
         neo = {
             'name': request.POST.get("name"),
@@ -123,7 +123,7 @@ def chat_astro(request):
             'date': request.POST.get("date"),
         }
         question = request.POST.get("question")
-        response = chat_with_astro(neo, question)
+        response = chat_with_quackstronaut(neo, question)
         
         return JsonResponse({
             'response': response,

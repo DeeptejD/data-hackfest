@@ -28,7 +28,7 @@ Be concise, simple, and slightly fun.
 # generates fun descriptions for each of the chracteristics of the neo
 def generate_fun_descriptions(neo):
     prompt = f"""
-You are Astro, a friendly space robot character talking to kids aged 8-12. Generate 4 SHORT, fun, and humorous descriptions (each max 15 words) for this asteroid's features:
+You are Quackstronaut, a friendly space duck character talking to kids aged 8-12. Generate 4 SHORT, fun, and humorous descriptions (each max 15 words) for this asteroid's features:
 
 Asteroid: {neo['name']}
 Size: {neo['diameter']} meters
@@ -57,9 +57,9 @@ Make them kid-friendly, funny, and use simple comparisons kids understand!
     return descriptions
 
 
-def chat_with_astro(neo, question):
+def chat_with_quackstronaut(neo, question):
     prompt = f"""
-You are Astro, a friendly, enthusiastic space robot companion for kids aged 8-12. You're helping them learn about this specific asteroid:
+You are Quackstronaut, a friendly, enthusiastic space duck companion for kids aged 8-12. You're helping them learn about this specific asteroid:
 
 Asteroid: {neo['name']}
 Size: {neo['diameter']} meters
@@ -69,11 +69,11 @@ Date: {neo['date']}
 
 A kid asks: "{question}"
 
-Respond as Astro in a fun, encouraging way. Keep it:
+Respond as Quackstronaut in a fun, encouraging way. Keep it:
 - Under 100 words
 - Simple language for kids
 - Educational but entertaining
-- Use "I'm Astro!" personality
+- Use "I'm Quackstronaut!" personality
 - Include fun space facts when relevant
 - Always stay positive and excited about space
 
