@@ -4,6 +4,8 @@ from authlib.integrations.django_client import OAuth
 from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect
 from .nasa import fetch_neos
+from django.views.decorators.csrf import csrf_exempt
+from .gemini import summarize_asteroid
 
 oauth = OAuth()
 oauth.register(
@@ -41,5 +43,19 @@ def logout(request):
         f'returnTo={os.getenv("AUTH0_LOGOUT_URL")}&'
         f'client_id={os.getenv("AUTH0_CLIENT_ID")}'
     )
+
+@csrf_exempt
+def summary(request):
+    if request.method == "POST":
+        neo = {
+            'name': request.POST.get("name"),
+            'diameter': request.POST.get("diameter"),
+            'speed': request.POST.get("speed"),
+            'miss_distance': request.POST.get("miss_distance"),
+            'date': request.POST.get("date"),
+        }
+        summary_text = summarize_asteroid(neo)
+        return render(request, 'sentinel/summary.html', {"summary": summary_text, "neo": neo})
+    return redirect('/')
 
 # Create your views here.
