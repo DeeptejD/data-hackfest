@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from authlib.integrations.django_client import OAuth
 from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect
+from .nasa import fetch_neos
 
 oauth = OAuth()
 oauth.register(
@@ -17,7 +18,8 @@ oauth.register(
 
 def index(request):
     user = request.session.get('user')
-    return render(request, 'sentinel/index.html', context={'user': user})
+    neos = fetch_neos()
+    return render(request, 'sentinel/index.html', context={'user': user, 'neos': neos})
 
 def login(request):
     return oauth.auth0.authorize_redirect(request, os.getenv("AUTH0_CALLBACK_URL"))
@@ -32,6 +34,7 @@ def callback(request):
     return redirect('/')
 
 def logout(request):
+    request.session.flush()
     django_logout(request)
     return HttpResponseRedirect(
         f'https://{os.getenv("AUTH0_DOMAIN")}/v2/logout?'

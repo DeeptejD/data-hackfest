@@ -1,19 +1,22 @@
-<!DOCTYPE html>
-<html>
+{% if user and user.name %}
+<h2>Welcome, {{ user.name }}!</h2>
+<p>Email: {{ user.email }}</p>
+<a href="/logout">Logout</a>
 
-<head>
-    <title>Cosmic Sentinel</title>
-</head>
-
-<body>
-    {% if user %}
-    <h2>Welcome, {{ user.name }}!</h2>
-    <p>Email: {{ user.email }}</p>
-    <a href="/logout">Logout</a>
-    {% else %}
-    <h2>Welcome to Cosmic Sentinel</h2>
-    <a href="/login">Login with Auth0</a>
-    {% endif %}
-</body>
-
-</html>
+<h3>Near-Earth Objects Today</h3>
+<ul>
+    {% for obj in neos %}
+    <li>
+        <strong>{{ obj.name }}</strong><br>
+        Size: {{ obj.diameter }} m<br>
+        Speed: {{ obj.speed }} km/s<br>
+        Distance: {{ obj.miss_distance }} lunar distances<br>
+        Date: {{ obj.date }}
+    </li>
+    <hr>
+    {% endfor %}
+</ul>
+{% else %}
+<h2>Welcome to Cosmic Sentinel</h2>
+<a href="/login">Login with Auth0</a>
+{% endif %}
