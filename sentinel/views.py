@@ -109,13 +109,11 @@ def index(request):
     if not user:
         return redirect("/")
     
-    # Get date range from request parameters
+    # Get date range from request parameters for form defaults
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
     
-    neos = fetch_neos(start_date, end_date)
-    
-    # Get user's favorited NEOs
+    # Get user's favorited NEOs for immediate display
     user_favorites = set()
     if user:
         favorites = FavoriteNEO.objects.filter(user_email=user["email"]).values_list('name', flat=True)
@@ -126,13 +124,51 @@ def index(request):
     current_start = start_date if start_date else date.today().isoformat()
     current_end = end_date if end_date else (date.today() + timedelta(days=1)).isoformat()
     
+    # Load page instantly without waiting for NEO data
     return render(request, 'sentinel/index.html', context={
         'user': user, 
-        'neos': neos,
         'user_favorites': user_favorites,
         'current_start_date': current_start,
         'current_end_date': current_end
     })
+
+# Async endpoint for fetching NEOs
+def get_neos_data(request):
+    user = request.session.get('user')
+    if not user:
+        return JsonResponse({'error': 'Not authenticated'}, status=401)
+    
+    try:
+        # Get date range from request parameters
+        start_date = request.GET.get('start_date')
+        end_date = request.GET.get('end_date')
+        
+        # Track user interaction
+        track_user_interaction(user['email'], 'neos_view')
+        
+        # Fetch NEOs from NASA API
+        neos = fetch_neos(start_date, end_date)
+        
+        # Get user's favorited NEOs
+        user_favorites = set()
+        if user:
+            favorites = FavoriteNEO.objects.filter(user_email=user["email"]).values_list('name', flat=True)
+            user_favorites = set(favorites)
+        
+        # Add favorite status to each NEO
+        for neo in neos:
+            neo['is_favorite'] = neo['name'] in user_favorites
+        
+        return JsonResponse({
+            'neos': neos,
+            'success': True
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'error': f'Failed to fetch NEO data: {str(e)}',
+            'success': False
+        }, status=500)
 
 # favorite neos list
 def favorites(request):

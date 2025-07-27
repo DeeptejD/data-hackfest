@@ -326,7 +326,11 @@
             <!-- Cool stats banner -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 <div class="sketch-border bg-space-gray p-6 rounded-2xl">
-                    <div class="text-4xl font-black text-neon-green mb-2">{{ neos|length }}</div>
+                    <div class="text-4xl font-black text-neon-green mb-2" id="neoCount">
+                        <div class="flex items-center justify-center">
+                            <div class="animate-spin rounded-full h-8 w-8 border-2 border-neon-green border-t-transparent"></div>
+                        </div>
+                    </div>
                     <div class="text-white font-bold">Space Rocks Found!</div>
                 </div>
                 <div class="sketch-border sketch-border-purple bg-space-gray p-6 rounded-2xl">
@@ -412,129 +416,27 @@
         </div>
 
         <!-- Cool Card Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {% for obj in neos %}
-            <!-- Individual Lab Report Card -->
-            <div class="sketch-border bg-space-gray rounded-2xl overflow-hidden smooth-hover relative group">
-
-                <!-- Lab Report Header -->
-                <div class="asteroid-space-bg p-4 relative">
-
-                    <!-- Heart Button -->
-                    <div class="absolute top-3 right-3 z-20">
-                        {% if obj.name in user_favorites %}
-                        <form action="/unfavorite/" method="post" class="inline-block">
-                            {% csrf_token %}
-                            <input type="hidden" name="name" value="{{ obj.name }}">
-                            <button type="submit" title="Remove from favorites"
-                                class="bg-hot-pink bg-opacity-80 rounded-full p-2 transition-all duration-500 ease-in-out group border-2 border-hot-pink hover:scale-110 hover:bg-opacity-60">
-                                <svg class="w-4 h-4 text-white transition-colors duration-300"
-                                    fill="currentColor" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                    </path>
-                                </svg>
-                            </button>
-                        </form>
-                        {% else %}
-                        <form action="/save_favorite/" method="post" class="inline-block">
-                            {% csrf_token %}
-                            <input type="hidden" name="name" value="{{ obj.name }}">
-                            <input type="hidden" name="diameter" value="{{ obj.diameter }}">
-                            <input type="hidden" name="speed" value="{{ obj.speed }}">
-                            <input type="hidden" name="miss_distance" value="{{ obj.miss_distance }}">
-                            <input type="hidden" name="date" value="{{ obj.date }}">
-                            <button type="submit" title="Add to favorites"
-                                class="bg-black bg-opacity-50 hover:bg-hot-pink rounded-full p-2 transition-all duration-500 ease-in-out group border-2 border-neon-green hover:border-hot-pink hover:scale-110">
-                                <svg class="w-4 h-4 text-neon-green group-hover:text-white transition-colors duration-300"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                    </path>
-                                </svg>
-                            </button>
-                        </form>
-                        {% endif %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="neoGrid">
+            <!-- Loading state -->
+            <div class="col-span-full flex items-center justify-center py-16" id="loadingState">
+                <div class="text-center">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="animate-spin rounded-full h-12 w-12 border-4 border-electric-blue border-t-transparent"></div>
                     </div>
-
-                    <!-- Specimen Name -->
-                    <div class="text-center pr-10 relative z-10">
-                        <div class="text-xs text-electric-blue font-bold mb-1">SPECIMEN #{{ forloop.counter }}</div>
-                        <h3 class="text-white font-black text-lg leading-tight">{{ obj.name }}</h3>
-                        <div class="text-xs text-neon-green mt-1">STATUS: ACTIVE</div>
-                    </div>
-                </div>
-
-                <!-- Lab Data Section -->
-                <div class="p-5 bg-space-gray">
-                    <!-- Data Grid -->
-                    <div class="space-y-3 mb-5">
-
-                        <!-- Size Data -->
-                        <div
-                            class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-neon-green border-opacity-30">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-neon-green text-lg font-bold">SIZE</span>
-                            </div>
-                            <div class="text-neon-green font-black">{{ obj.diameter }}m</div>
-                        </div>
-
-                        <!-- Speed Data -->
-                        <div
-                            class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-hot-pink border-opacity-30">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-hot-pink text-lg font-bold">VELOCITY</span>
-                            </div>
-                            <div class="text-hot-pink font-black">{{ obj.speed }} km/s</div>
-                        </div>
-
-                        <!-- Distance Data -->
-                        <div
-                            class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-electric-blue border-opacity-30">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-electric-blue text-lg font-bold">DISTANCE</span>
-                            </div>
-                            <div class="text-electric-blue font-black">{{ obj.miss_distance }} LD</div>
-                        </div>
-
-                        <!-- Date Data -->
-                        <div
-                            class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-stellar-cyan border-opacity-30">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-stellar-cyan text-lg font-bold">FLYBY</span>
-                            </div>
-                            <div class="text-stellar-cyan font-black text-sm">{{ obj.date }}</div>
-                        </div>
-                    </div>
-
-                    <!-- Investigation Button -->
-                    <form method="post" action="/neo-details/" class="w-full">
-                        {% csrf_token %}
-                        <input type="hidden" name="name" value="{{ obj.name }}">
-                        <input type="hidden" name="diameter" value="{{ obj.diameter }}">
-                        <input type="hidden" name="speed" value="{{ obj.speed }}">
-                        <input type="hidden" name="miss_distance" value="{{ obj.miss_distance }}">
-                        <input type="hidden" name="date" value="{{ obj.date }}">
-                        <button type="submit"
-                            class="w-full bg-gradient-to-r from-cosmic-purple to-hot-pink hover:from-hot-pink hover:to-electric-blue text-white py-3 px-4 rounded-xl font-black text-sm transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-105 relative overflow-hidden group">
-                            <!-- Button background effect -->
-                            <div
-                                class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500">
-                            </div>
-                            <div class="relative z-10 flex items-center justify-center space-x-2">
-                                <span>INVESTIGATE SPECIMEN</span>
-                            </div>
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Cool corner badge -->
-                <div
-                    class="absolute top-0 left-0 bg-neon-green text-black text-xs font-black px-2 py-1 transform -rotate-45 -translate-x-3 translate-y-3">
-                    NEW
+                    <div class="text-white text-xl font-bold">🛰️ Scanning the cosmos...</div>
+                    <div class="text-gray-400 text-sm mt-2">Fetching near-Earth objects from NASA</div>
                 </div>
             </div>
-            {% endfor %}
+            
+            <!-- Error state (initially hidden) -->
+            <div class="col-span-full text-center py-16 hidden" id="errorState">
+                <div class="text-red-400 text-2xl font-bold mb-4">🚫 Cosmic Connection Lost!</div>
+                <div class="text-gray-400 mb-4">Unable to fetch NEO data. Please try again.</div>
+                <button onclick="loadNEOData()" 
+                        class="bg-gradient-to-r from-hot-pink to-electric-blue hover:from-neon-green hover:to-hot-pink text-white px-6 py-3 rounded-lg font-bold transition-all duration-300 hover:scale-105">
+                    🔄 RETRY SCAN
+                </button>
+            </div>
         </div>
 
         <!-- EPIC Lab Report Footer -->
@@ -589,6 +491,11 @@
         </section>
     </main>
 
+    <!-- CSRF Token for JavaScript -->
+    <div style="display: none;">
+        {% csrf_token %}
+    </div>
+
     <!-- Cool JavaScript for extra interactivity -->
     <script>
         // Add smooth hover effects to cards
@@ -632,6 +539,9 @@
 
         // Date preset handlers
         document.addEventListener('DOMContentLoaded', function() {
+            // Load NEO data immediately when page loads
+            loadNEOData();
+            
             // Handle quick date presets
             const today = new Date();
             const todayStr = today.toISOString().split('T')[0];
@@ -654,11 +564,12 @@
             const endDateInput = document.getElementById('end_date');
             
             dateRangeForm.addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevent normal form submission
+                
                 const startDate = new Date(startDateInput.value);
                 const endDate = new Date(endDateInput.value);
                 
                 if (endDate < startDate) {
-                    e.preventDefault();
                     alert('End date must be after start date!');
                     return false;
                 }
@@ -666,12 +577,207 @@
                 // NASA API has a 7-day limit for the feed endpoint
                 const daysDiff = (endDate - startDate) / (1000 * 60 * 60 * 24);
                 if (daysDiff > 7) {
-                    e.preventDefault();
                     alert('Date range cannot exceed 7 days due to NASA API limitations.');
                     return false;
                 }
+                
+                // Load NEO data with new date range
+                loadNEOData(startDateInput.value, endDateInput.value);
             });
         });
+
+        // Async NEO data loading
+        let neoDataLoaded = false;
+        
+        async function loadNEOData(startDate = null, endDate = null) {
+            const loadingState = document.getElementById('loadingState');
+            const errorState = document.getElementById('errorState');
+            const neoGrid = document.getElementById('neoGrid');
+            const neoCount = document.getElementById('neoCount');
+            
+            // Show loading state
+            loadingState.classList.remove('hidden');
+            errorState.classList.add('hidden');
+            
+            // Clear existing NEO cards if reloading
+            if (neoDataLoaded) {
+                const existingCards = neoGrid.querySelectorAll('.sketch-border:not(#loadingState):not(#errorState)');
+                existingCards.forEach(card => card.remove());
+            }
+            
+            // Update loading message
+            if (startDate && endDate) {
+                loadingState.querySelector('.text-gray-400').textContent = `Scanning from ${startDate} to ${endDate}...`;
+            }
+            
+            try {
+                let url = '/api/neos-data/';
+                const params = new URLSearchParams();
+                if (startDate) params.append('start_date', startDate);
+                if (endDate) params.append('end_date', endDate);
+                if (params.toString()) url += '?' + params.toString();
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    // Hide loading state
+                    loadingState.classList.add('hidden');
+                    
+                    // Update count
+                    neoCount.innerHTML = data.neos.length;
+                    
+                    // Create NEO cards
+                    data.neos.forEach((neo, index) => {
+                        const card = createNEOCard(neo, index + 1);
+                        neoGrid.appendChild(card);
+                    });
+                    
+                    // Re-apply hover effects to new cards
+                    applyHoverEffects();
+                    
+                    neoDataLoaded = true;
+                } else {
+                    throw new Error(data.error || 'Failed to load NEO data');
+                }
+            } catch (error) {
+                console.error('Error loading NEO data:', error);
+                loadingState.classList.add('hidden');
+                errorState.classList.remove('hidden');
+                neoCount.innerHTML = '⚠️';
+            }
+        }
+        
+        function createNEOCard(neo, index) {
+            const card = document.createElement('div');
+            card.className = 'sketch-border bg-space-gray rounded-2xl overflow-hidden smooth-hover relative group';
+            
+            const favoriteButton = neo.is_favorite 
+                ? `<form action="/unfavorite/" method="post" class="inline-block">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="${document.querySelector('[name=csrfmiddlewaretoken]').value}">
+                    <input type="hidden" name="name" value="${neo.name}">
+                    <button type="submit" title="Remove from favorites"
+                        class="bg-hot-pink bg-opacity-80 rounded-full p-2 transition-all duration-500 ease-in-out group border-2 border-hot-pink hover:scale-110 hover:bg-opacity-60">
+                        <svg class="w-4 h-4 text-white transition-colors duration-300"
+                            fill="currentColor" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                    </button>
+                </form>`
+                : `<form action="/save_favorite/" method="post" class="inline-block">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="${document.querySelector('[name=csrfmiddlewaretoken]').value}">
+                    <input type="hidden" name="name" value="${neo.name}">
+                    <input type="hidden" name="diameter" value="${neo.diameter}">
+                    <input type="hidden" name="speed" value="${neo.speed}">
+                    <input type="hidden" name="miss_distance" value="${neo.miss_distance}">
+                    <input type="hidden" name="date" value="${neo.date}">
+                    <button type="submit" title="Add to favorites"
+                        class="bg-black bg-opacity-50 hover:bg-hot-pink rounded-full p-2 transition-all duration-500 ease-in-out group border-2 border-neon-green hover:border-hot-pink hover:scale-110">
+                        <svg class="w-4 h-4 text-neon-green group-hover:text-white transition-colors duration-300"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                    </button>
+                </form>`;
+            
+            card.innerHTML = `
+                <!-- Lab Report Header -->
+                <div class="asteroid-space-bg p-4 relative">
+                    <!-- Heart Button -->
+                    <div class="absolute top-3 right-3 z-20">
+                        ${favoriteButton}
+                    </div>
+
+                    <!-- Specimen Name -->
+                    <div class="text-center pr-10 relative z-10">
+                        <div class="text-xs text-electric-blue font-bold mb-1">SPECIMEN #${index}</div>
+                        <h3 class="text-white font-black text-lg leading-tight">${neo.name}</h3>
+                        <div class="text-xs text-neon-green mt-1">STATUS: ACTIVE</div>
+                    </div>
+                </div>
+
+                <!-- Lab Data Section -->
+                <div class="p-5 bg-space-gray">
+                    <!-- Data Grid -->
+                    <div class="space-y-3 mb-5">
+                        <!-- Size Data -->
+                        <div class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-neon-green border-opacity-30">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-neon-green text-lg font-bold">SIZE</span>
+                            </div>
+                            <div class="text-neon-green font-black">${neo.diameter}m</div>
+                        </div>
+
+                        <!-- Speed Data -->
+                        <div class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-hot-pink border-opacity-30">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-hot-pink text-lg font-bold">VELOCITY</span>
+                            </div>
+                            <div class="text-hot-pink font-black">${neo.speed} km/s</div>
+                        </div>
+
+                        <!-- Distance Data -->
+                        <div class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-electric-blue border-opacity-30">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-electric-blue text-lg font-bold">DISTANCE</span>
+                            </div>
+                            <div class="text-electric-blue font-black">${neo.miss_distance} LD</div>
+                        </div>
+
+                        <!-- Date Data -->
+                        <div class="flex items-center justify-between p-2 bg-space-black rounded-lg border border-stellar-cyan border-opacity-30">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-stellar-cyan text-lg font-bold">FLYBY</span>
+                            </div>
+                            <div class="text-stellar-cyan font-black text-sm">${neo.date}</div>
+                        </div>
+                    </div>
+
+                    <!-- Investigation Button -->
+                    <form method="post" action="/neo-details/" class="w-full">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="${document.querySelector('[name=csrfmiddlewaretoken]').value}">
+                        <input type="hidden" name="name" value="${neo.name}">
+                        <input type="hidden" name="diameter" value="${neo.diameter}">
+                        <input type="hidden" name="speed" value="${neo.speed}">
+                        <input type="hidden" name="miss_distance" value="${neo.miss_distance}">
+                        <input type="hidden" name="date" value="${neo.date}">
+                        <button type="submit"
+                            class="w-full bg-gradient-to-r from-cosmic-purple to-hot-pink hover:from-hot-pink hover:to-electric-blue text-white py-3 px-4 rounded-xl font-black text-sm transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-105 relative overflow-hidden group">
+                            <!-- Button background effect -->
+                            <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                            <div class="relative z-10 flex items-center justify-center space-x-2">
+                                <span>INVESTIGATE SPECIMEN</span>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Cool corner badge -->
+                <div class="absolute top-0 left-0 bg-neon-green text-black text-xs font-black px-2 py-1 transform -rotate-45 -translate-x-3 translate-y-3">
+                    NEW
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        function applyHoverEffects() {
+            document.querySelectorAll('.sketch-border').forEach(card => {
+                card.addEventListener('mouseenter', function () {
+                    this.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    this.style.transform = 'scale(1.03) rotate(' + (Math.random() * 1 - 0.5) + 'deg)';
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    this.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    this.style.transform = 'scale(1) rotate(0deg)';
+                });
+            });
+        }
     </script>
 
 </body>
