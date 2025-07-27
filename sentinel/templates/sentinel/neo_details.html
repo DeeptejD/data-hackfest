@@ -422,8 +422,11 @@
                         <h3 class="text-xl font-black text-hot-pink mb-4">
                             QUACKSTRONAUT'S ANALYSIS REPORT
                         </h3>
-                        <div class="text-gray-300 leading-relaxed">
-                            {{ summary|default:"This specimen is currently under deep space analysis. Preliminary data suggests fascinating cosmic properties worth investigating!" }}
+                        <div class="text-gray-300 leading-relaxed" id="summaryContent">
+                            <div class="flex items-center space-x-3">
+                                <div class="animate-spin rounded-full h-5 w-5 border-2 border-hot-pink border-t-transparent"></div>
+                                <span>🦆 Quackstronaut is analyzing this specimen...</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -448,8 +451,8 @@
                             {{ neo.diameter }}m
                         </p>
                         <div class="bg-space-black p-3 rounded-lg border border-neon-green border-opacity-30">
-                            <p class="text-gray-300 text-sm">
-                                {{ descriptions.size|default:"This specimen shows remarkable dimensional characteristics worthy of further study!" }}
+                            <p class="text-gray-300 text-sm" id="sizeDescription">
+                                
                             </p>
                         </div>
                     </div>
@@ -472,8 +475,8 @@
                             {{ neo.speed }} km/s
                         </p>
                         <div class="bg-space-black p-3 rounded-lg border border-hot-pink border-opacity-30">
-                            <p class="text-gray-300 text-sm">
-                                {{ descriptions.speed|default:"Incredible velocity readings! This specimen moves faster than any terrestrial vehicle!" }}
+                            <p class="text-gray-300 text-sm" id="speedDescription">
+                                
                             </p>
                         </div>
                     </div>
@@ -496,8 +499,8 @@
                             {{ neo.miss_distance }} LD
                         </p>
                         <div class="bg-space-black p-3 rounded-lg border border-electric-blue border-opacity-30">
-                            <p class="text-gray-300 text-sm">
-                                {{ descriptions.distance|default:"LD = Lunar Distance (distance to Moon). This specimen maintains a perfectly safe trajectory!" }}
+                            <p class="text-gray-300 text-sm" id="distanceDescription">
+                                
                             </p>
                         </div>
                     </div>
@@ -522,8 +525,8 @@
                             {{ neo.date }}
                         </p>
                         <div class="bg-space-black p-3 rounded-lg border border-stellar-cyan border-opacity-30">
-                            <p class="text-gray-300 text-sm">
-                                {{ descriptions.date|default:"Mark this date! Perfect opportunity for astronomical observation and data collection!" }}
+                            <p class="text-gray-300 text-sm" id="dateDescription">
+                                
                             </p>
                         </div>
                     </div>
@@ -691,6 +694,144 @@
     </div>
 
     <script>
+        // Async content loading
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNeoSummary();
+            loadNeoDescriptions();
+        });
+
+        async function loadNeoSummary() {
+            try {
+                const neoData = {
+                    name: '{{ neo.name|escapejs }}',
+                    diameter: '{{ neo.diameter|escapejs }}',
+                    speed: '{{ neo.speed|escapejs }}',
+                    miss_distance: '{{ neo.miss_distance|escapejs }}',
+                    date: '{{ neo.date|escapejs }}'
+                };
+                
+                const response = await fetch('/api/neo-summary/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: new URLSearchParams(neoData)
+                });
+
+                const data = await response.json();
+                
+                const summaryElement = document.getElementById('summaryContent');
+                if (data.success && data.summary) {
+                    summaryElement.innerHTML = `
+                        <p class="text-white text-sm mb-4 leading-relaxed font-light">
+                            ${data.summary}
+                        </p>
+                    `;
+                } else {
+                    summaryElement.innerHTML = `
+                        <p class="text-neon-green text-sm mb-4 leading-relaxed font-light">
+                            🔬 Analysis systems temporarily offline! Our quack team is working on it!
+                        </p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading summary:', error);
+                document.getElementById('summaryContent').innerHTML = `
+                    <p class="text-hot-pink text-sm mb-4 leading-relaxed font-light">
+                        📡 Communication error! Please refresh to retry analysis!
+                    </p>
+                `;
+            }
+        }
+
+        async function loadNeoDescriptions() {
+            try {
+                const neoData = {
+                    name: '{{ neo.name|escapejs }}',
+                    diameter: '{{ neo.diameter|escapejs }}',
+                    speed: '{{ neo.speed|escapejs }}',
+                    miss_distance: '{{ neo.miss_distance|escapejs }}',
+                    date: '{{ neo.date|escapejs }}'
+                };
+                
+                const response = await fetch('/api/neo-descriptions/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: new URLSearchParams(neoData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success && data.descriptions) {
+                    // Update size description
+                    const sizeElement = document.getElementById('sizeDescription');
+                    if (data.descriptions.size) {
+                        sizeElement.innerHTML = data.descriptions.size;
+                        sizeElement.className = "text-white text-sm leading-relaxed font-light";
+                    } else {
+                        sizeElement.innerHTML = '🔬 Size analysis pending...';
+                        sizeElement.className = "text-neon-green text-sm";
+                    }
+
+                    // Update speed description
+                    const speedElement = document.getElementById('speedDescription');
+                    if (data.descriptions.speed) {
+                        speedElement.innerHTML = data.descriptions.speed;
+                        speedElement.className = "text-white text-sm leading-relaxed font-light";
+                    } else {
+                        speedElement.innerHTML = '⚡ Velocity analysis pending...';
+                        speedElement.className = "text-neon-green text-sm";
+                    }
+
+                    // Update distance description
+                    const distanceElement = document.getElementById('distanceDescription');
+                    if (data.descriptions.distance) {
+                        distanceElement.innerHTML = data.descriptions.distance;
+                        distanceElement.className = "text-white text-sm leading-relaxed font-light";
+                    } else {
+                        distanceElement.innerHTML = '📏 Distance analysis pending...';
+                        distanceElement.className = "text-electric-blue text-sm";
+                    }
+
+                    // Update date description
+                    const dateElement = document.getElementById('dateDescription');
+                    if (data.descriptions.date) {
+                        dateElement.innerHTML = data.descriptions.date;
+                        dateElement.className = "text-white text-sm leading-relaxed font-light";
+                    } else {
+                        dateElement.innerHTML = '📅 Temporal analysis pending...';
+                        dateElement.className = "text-stellar-cyan text-sm";
+                    }
+                } else {
+                    // Handle error for all descriptions
+                    const errorMsg = '🔬 Analysis systems offline! Retry needed!';
+                    const elements = [
+                        'sizeDescription', 'speedDescription', 'distanceDescription', 'dateDescription'
+                    ];
+                    elements.forEach(id => {
+                        const element = document.getElementById(id);
+                        element.innerHTML = errorMsg;
+                        element.className = "text-neon-green text-sm";
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading descriptions:', error);
+                const errorMsg = '📡 Communication error! Refresh to retry!';
+                const elements = [
+                    'sizeDescription', 'speedDescription', 'distanceDescription', 'dateDescription'
+                ];
+                elements.forEach(id => {
+                    const element = document.getElementById(id);
+                    element.innerHTML = errorMsg;
+                    element.className = "text-hot-pink text-sm";
+                });
+            }
+        }
+
         // Chat functionality
         const chatToggle = document.getElementById("chatToggle");
         const chatWindow = document.getElementById("chatWindow");

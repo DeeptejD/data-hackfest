@@ -32,5 +32,7 @@ urlpatterns = [
     path("profile/", views.profile, name="profile"),
     path("api/daily-briefing/", views.get_daily_briefing, name="daily_briefing"),
     path("api/neos-data/", views.get_neos_data, name="neos_data"),
+    path("api/neo-summary/", views.get_neo_summary, name="neo_summary"),
+    path("api/neo-descriptions/", views.get_neo_descriptions, name="neo_descriptions"),
     path('', views.home, name='home'),
 ]

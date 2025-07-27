@@ -190,9 +190,6 @@ def neo_details(request):
             'miss_distance': request.POST.get("miss_distance"),
             'date': request.POST.get("date"),
         }
-        # Get AI summary and fun descriptions for this NEO
-        summary_text = summarize_asteroid(neo)
-        fun_descriptions = generate_fun_descriptions(neo)
         user = request.session.get('user')
         
         # Track NEO viewing for achievements
@@ -207,14 +204,69 @@ def neo_details(request):
                 name=neo['name']
             ).exists()
         
+        # Load page instantly without waiting for AI data
         return render(request, 'sentinel/neo_details.html', {
             "neo": neo, 
-            "summary": summary_text,
-            "descriptions": fun_descriptions,
             "user": user,
             "is_favorited": is_favorited
         })
     return redirect('/neos')
+
+# Async endpoint for NEO summary
+@csrf_exempt
+def get_neo_summary(request):
+    if request.method == "POST":
+        neo = {
+            'name': request.POST.get("name"),
+            'diameter': request.POST.get("diameter"),
+            'speed': request.POST.get("speed"),
+            'miss_distance': request.POST.get("miss_distance"),
+            'date': request.POST.get("date"),
+        }
+        
+        try:
+            # Get AI summary for this NEO
+            summary_text = summarize_asteroid(neo)
+            
+            return JsonResponse({
+                'summary': summary_text,
+                'success': True
+            })
+        except Exception as e:
+            return JsonResponse({
+                'error': f'Failed to generate summary: {str(e)}',
+                'success': False
+            }, status=500)
+    
+    return JsonResponse({'success': False}, status=400)
+
+# Async endpoint for NEO fun descriptions
+@csrf_exempt 
+def get_neo_descriptions(request):
+    if request.method == "POST":
+        neo = {
+            'name': request.POST.get("name"),
+            'diameter': request.POST.get("diameter"),
+            'speed': request.POST.get("speed"),
+            'miss_distance': request.POST.get("miss_distance"),
+            'date': request.POST.get("date"),
+        }
+        
+        try:
+            # Get fun descriptions for this NEO
+            fun_descriptions = generate_fun_descriptions(neo)
+            
+            return JsonResponse({
+                'descriptions': fun_descriptions,
+                'success': True
+            })
+        except Exception as e:
+            return JsonResponse({
+                'error': f'Failed to generate descriptions: {str(e)}',
+                'success': False
+            }, status=500)
+    
+    return JsonResponse({'success': False}, status=400)
 
 # an endpoint that take takes neo details and a question and returns a json response from gemini
 @csrf_exempt
