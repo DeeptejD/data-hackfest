@@ -55,7 +55,11 @@ def index(request):
     if not user:
         return redirect("/")
     
-    neos = fetch_neos()
+    # Get date range from request parameters
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    
+    neos = fetch_neos(start_date, end_date)
     
     # Get user's favorited NEOs
     user_favorites = set()
@@ -63,10 +67,17 @@ def index(request):
         favorites = FavoriteNEO.objects.filter(user_email=user["email"]).values_list('name', flat=True)
         user_favorites = set(favorites)
     
+    # Pass current date range to template for form defaults
+    from datetime import date, timedelta
+    current_start = start_date if start_date else date.today().isoformat()
+    current_end = end_date if end_date else (date.today() + timedelta(days=1)).isoformat()
+    
     return render(request, 'sentinel/index.html', context={
         'user': user, 
         'neos': neos,
-        'user_favorites': user_favorites
+        'user_favorites': user_favorites,
+        'current_start_date': current_start,
+        'current_end_date': current_end
     })
 
 # favorite neos list

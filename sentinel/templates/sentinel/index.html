@@ -45,14 +45,20 @@
             border-radius: 15px;
             filter: url(#roughen);
             animation: sketch-glow 3s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: -1;
         }
 
         .sketch-border-purple::before {
             border-color: #ff1493;
+            pointer-events: none;
+            z-index: -1;
         }
 
         .sketch-border-cyan::before {
             border-color: #00ffff;
+            pointer-events: none;
+            z-index: -1;
         }
 
         @keyframes sketch-glow {
@@ -200,6 +206,7 @@
             background: linear-gradient(45deg, #39ff14, #00ffff, #ff1493, #6366f1);
             background-size: 300% 300%;
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: holo-shift 3s ease-in-out infinite;
         }
@@ -216,6 +223,18 @@
             100% {
                 background-position: 0% 50%;
             }
+        }
+        
+        /* Ensure all interactive elements are clickable */
+        a, button, input, select, textarea {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Fix any potential overlay issues */
+        .interactive-element {
+            position: relative;
+            z-index: 20;
         }
     </style>
 
@@ -316,6 +335,57 @@
         </div>
     </section>
 
+    <!-- DATE RANGE SELECTOR -->
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="sketch-border bg-space-gray rounded-2xl p-6 relative">
+            <div class="text-center mb-6 relative z-20">
+                <h3 class="text-xl font-black text-electric-blue mb-2" style="font-family: 'Orbitron', monospace;">
+                    TEMPORAL SCANNER CONTROLS
+                </h3>
+                <p class="text-sm text-gray-300">Select date range to scan for cosmic visitors</p>
+            </div>
+            
+            <form method="GET" action="/neos" class="flex flex-col sm:flex-row gap-4 items-center justify-center relative z-20" id="dateRangeForm">
+                <div class="flex flex-col sm:flex-row gap-4 items-center">
+                    <div class="flex items-center space-x-2">
+                        <label for="start_date" class="text-neon-green font-bold text-sm">START:</label>
+                        <input type="date" id="start_date" name="start_date" 
+                               value="{{ current_start_date }}"
+                               class="bg-space-black border-2 border-neon-green rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-electric-blue relative z-30">
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <label for="end_date" class="text-hot-pink font-bold text-sm">END:</label>
+                        <input type="date" id="end_date" name="end_date" 
+                               value="{{ current_end_date }}"
+                               class="bg-space-black border-2 border-hot-pink rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-electric-blue relative z-30">
+                    </div>
+                </div>
+                
+                <button type="submit" 
+                        class="bg-gradient-to-r from-neon-green to-electric-blue hover:from-hot-pink hover:to-neon-green text-black hover:text-white px-6 py-2 rounded-lg font-bold transition-all duration-500 relative z-30">
+                    SCAN COSMOS
+                </button>
+            </form>
+            
+            <!-- Quick Date Presets -->
+            <div class="flex flex-wrap justify-center gap-2 mt-4 relative z-20">
+                <a href="/neos" 
+                   class="bg-space-black border border-gray-600 hover:border-neon-green text-gray-300 hover:text-neon-green px-3 py-1 rounded text-xs font-bold transition-colors duration-300 relative z-30">
+                    Today
+                </a>
+                <a href="#" id="next7Days"
+                   class="bg-space-black border border-gray-600 hover:border-electric-blue text-gray-300 hover:text-electric-blue px-3 py-1 rounded text-xs font-bold transition-colors duration-300 relative z-30">
+                    Next 7 Days
+                </a>
+                <a href="#" id="thisWeek"
+                   class="bg-space-black border border-gray-600 hover:border-hot-pink text-gray-300 hover:text-hot-pink px-3 py-1 rounded text-xs font-bold transition-colors duration-300 relative z-30">
+                    This Week
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- ASTEROID LAB CARDS -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
@@ -325,6 +395,14 @@
                 RESEARCH SPECIMENS
             </h3>
             <p class="text-lg text-gray-300">Each card is like a lab report - click to investigate further!</p>
+            
+            <!-- Current Date Range Display -->
+            <div class="mt-4 flex justify-center">
+                <div class="bg-space-black border border-electric-blue rounded-lg px-4 py-2">
+                    <span class="text-electric-blue font-bold text-sm">SCANNING PERIOD:</span>
+                    <span class="text-white font-bold text-sm ml-2">{{ current_start_date }} to {{ current_end_date }}</span>
+                </div>
+            </div>
         </div>
 
         <!-- Cool Card Grid -->
@@ -543,6 +621,49 @@
         document.querySelectorAll('nav a').forEach(link => {
             link.addEventListener('mouseenter', function () {
                 this.style.transition = 'all 0.4s ease-in-out';
+            });
+        });
+
+        // Date preset handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle quick date presets
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            
+            // Next 7 days preset
+            const next7Days = new Date(today.getTime() + 6 * 24 * 60 * 60 * 1000);
+            const next7DaysStr = next7Days.toISOString().split('T')[0];
+            
+            // This week preset (today + 6 days = 7 days total)
+            const thisWeek = new Date(today.getTime() + 6 * 24 * 60 * 60 * 1000);
+            const thisWeekStr = thisWeek.toISOString().split('T')[0];
+            
+            // Set up preset links
+            document.getElementById('next7Days').href = `/neos?start_date=${todayStr}&end_date=${next7DaysStr}`;
+            document.getElementById('thisWeek').href = `/neos?start_date=${todayStr}&end_date=${thisWeekStr}`;
+            
+            // Form validation
+            const dateRangeForm = document.getElementById('dateRangeForm');
+            const startDateInput = document.getElementById('start_date');
+            const endDateInput = document.getElementById('end_date');
+            
+            dateRangeForm.addEventListener('submit', function(e) {
+                const startDate = new Date(startDateInput.value);
+                const endDate = new Date(endDateInput.value);
+                
+                if (endDate < startDate) {
+                    e.preventDefault();
+                    alert('End date must be after start date!');
+                    return false;
+                }
+                
+                // NASA API has a 7-day limit for the feed endpoint
+                const daysDiff = (endDate - startDate) / (1000 * 60 * 60 * 24);
+                if (daysDiff > 7) {
+                    e.preventDefault();
+                    alert('Date range cannot exceed 7 days due to NASA API limitations.');
+                    return false;
+                }
             });
         });
     </script>

@@ -3,7 +3,25 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="vi        .space-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, white, transparent),
+                radial-gradient(2px 2px at 40px 70px, white, transparent),
+                radial-gradient(1px 1px at 90px 40px, white, transparent),
+                radial-gradient(1px 1px at 130px 80px, white, transparent),
+                radial-gradient(2px 2px at 160px 30px, white, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: twinkle 3s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+        }width=device-width, initial-scale=1.0">
     <title>CosmoDex - Space Lab</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -45,14 +63,20 @@
             border-radius: 15px;
             filter: url(#roughen);
             animation: sketch-glow 3s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: -1;
         }
 
         .sketch-border-purple::before {
             border-color: #ff1493;
+            pointer-events: none;
+            z-index: -1;
         }
 
         .sketch-border-cyan::before {
             border-color: #00ffff;
+            pointer-events: none;
+            z-index: -1;
         }
 
         @keyframes sketch-glow {
@@ -151,6 +175,7 @@
             background: linear-gradient(45deg, #39ff14, #00ffff, #ff1493, #6366f1);
             background-size: 300% 300%;
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: holo-shift 3s ease-in-out infinite;
         }
@@ -168,6 +193,18 @@
                 background-position: 0% 50%;
             }
         }
+        
+        /* Ensure all interactive elements are clickable */
+        a, button, input, select, textarea {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Fix any potential overlay issues */
+        .interactive-element {
+            position: relative;
+            z-index: 20;
+        }
     </style>
 
     <!-- SVG Filters for rough pencil effect -->
@@ -184,10 +221,9 @@
 <body class="bg-space-black min-h-screen crt-screen lab-notes" style="font-family: 'Space Mono', monospace;">
     <!-- Cool Navigation Lab Style -->
     <nav class="bg-space-gray relative overflow-hidden">
-
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex items-center justify-between h-20">
-                <div class="flex items-center space-x-8">
+                <div class="flex items-center space-x-8 relative z-20">
                     <!-- Cool logo -->
                     <div class="flex items-center space-x-3">
                         <h1 class="text-2xl font-black holo-text" style="font-family: 'Orbitron', monospace;">
@@ -197,19 +233,19 @@
 
                     {% if user and user.name %}
                     <!-- Navigation Links -->
-                    <div class="hidden md:flex space-x-8">
-                        <a href="/" class="text-electric-blue font-black relative">
+                    <div class="hidden md:flex space-x-8 relative z-20">
+                        <a href="/" class="text-electric-blue font-black relative z-30">
                             Home
                             <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-electric-blue"></span>
                         </a>
                         <a href="/neos"
-                            class="text-gray-300 hover:text-neon-green transition-colors duration-200 font-bold relative group">
+                            class="text-gray-300 hover:text-neon-green transition-colors duration-200 font-bold relative group z-30">
                             NEOs
                             <span
                                 class="absolute -bottom-1 left-0 w-0 h-0.5 bg-neon-green group-hover:w-full transition-all duration-300"></span>
                         </a>
                         <a href="/neos/favorites"
-                            class="text-gray-300 hover:text-hot-pink transition-colors duration-200 font-bold relative group">
+                            class="text-gray-300 hover:text-hot-pink transition-colors duration-200 font-bold relative group z-30">
                             Favorites
                             <span
                                 class="absolute -bottom-1 left-0 w-0 h-0.5 bg-hot-pink group-hover:w-full transition-all duration-300"></span>
@@ -220,9 +256,9 @@
 
                 {% if user and user.name %}
                 <!-- User Info -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-4 relative z-30">
                     <div class="text-neon-green font-bold">{{ user.name }}</div>
-                    <a href="/logout" class="text-red-400 hover:text-red-300 transition-colors duration-200 font-bold">
+                    <a href="/logout" class="text-red-400 hover:text-red-300 transition-colors duration-200 font-bold relative z-30">
                         Logout
                     </a>
                 </div>
@@ -264,7 +300,7 @@
                     </div>
                 </div>
 
-                <div class="p-8 bg-space-gray">
+                <div class="p-8 bg-space-gray relative z-10">
                     <div class="space-y-4 mb-6">
                         <div
                             class="flex items-center justify-between p-3 bg-space-black rounded-lg border border-neon-green border-opacity-30">
@@ -279,7 +315,7 @@
                     </div>
 
                     <a href="/neos"
-                        class="block w-full bg-gradient-to-r from-cosmic-purple to-hot-pink hover:from-hot-pink hover:to-electric-blue text-white py-4 px-6 rounded-xl font-black text-center transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-105 relative z-20">
+                        class="block w-full bg-gradient-to-r from-cosmic-purple to-hot-pink hover:from-hot-pink hover:to-electric-blue text-white py-4 px-6 rounded-xl font-black text-center transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-105 relative z-30">
                         ENTER RESEARCH LAB
                     </a>
                 </div>
@@ -296,7 +332,7 @@
                     </div>
                 </div>
 
-                <div class="p-8 bg-space-gray">
+                <div class="p-8 bg-space-gray relative z-10">
                     <div class="space-y-4 mb-6">
                         <div
                             class="flex items-center justify-between p-3 bg-space-black rounded-lg border border-electric-blue border-opacity-30">
@@ -311,7 +347,7 @@
                     </div>
 
                     <a href="/neos/favorites"
-                        class="block w-full bg-gradient-to-r from-stellar-cyan to-electric-blue hover:from-electric-blue hover:to-neon-green text-white py-4 px-6 rounded-xl font-black text-center transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-105 relative z-20">
+                        class="block w-full bg-gradient-to-r from-stellar-cyan to-electric-blue hover:from-electric-blue hover:to-neon-green text-white py-4 px-6 rounded-xl font-black text-center transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-105 relative z-30">
                         ACCESS VAULT
                     </a>
                 </div>
@@ -333,7 +369,7 @@
 
             <!-- Login Terminal -->
             <div class="sketch-border bg-space-gray rounded-2xl p-12 max-w-lg mx-auto">
-                <div class="bg-gradient-to-r from-cosmic-purple to-hot-pink p-6 rounded-xl mb-8">
+                <div class="bg-gradient-to-r from-cosmic-purple to-hot-pink p-6 rounded-xl mb-8 relative z-10">
                     <div class="text-center">
                         <div class="text-xs text-electric-blue font-bold mb-2">SECURITY TERMINAL</div>
                         <h3 class="text-2xl font-black text-white mb-2">AUTHORIZATION REQUIRED</h3>
@@ -341,7 +377,7 @@
                     </div>
                 </div>
 
-                <div class="space-y-4 mb-8">
+                <div class="space-y-4 mb-8 relative z-10">
                     <div
                         class="flex items-center justify-between p-3 bg-space-black rounded-lg border border-neon-green border-opacity-30">
                         <span class="text-neon-green font-bold text-sm">CLEARANCE</span>
@@ -360,7 +396,7 @@
                 </div>
 
                 <a href="/login"
-                    class="block w-full bg-gradient-to-r from-cosmic-purple to-hot-pink hover:from-hot-pink hover:to-electric-blue text-white py-4 px-6 rounded-xl font-black text-lg transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-105 relative overflow-hidden group">
+                    class="block w-full bg-gradient-to-r from-cosmic-purple to-hot-pink hover:from-hot-pink hover:to-electric-blue text-white py-4 px-6 rounded-xl font-black text-lg transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-105 relative overflow-hidden group z-30">
                     <div
                         class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500">
                     </div>
@@ -369,7 +405,7 @@
                     </div>
                 </a>
 
-                <p class="text-gray-400 text-sm mt-4">
+                <p class="text-gray-400 text-sm mt-4 relative z-10">
                     Powered by Auth0's Security
                 </p>
             </div>
