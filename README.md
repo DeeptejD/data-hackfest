@@ -9,7 +9,11 @@
 
 CosmoDex (Cosmic Sentinel) is an interactive web application that combines real-time NASA asteroid data with AI-powered content generation to create an educational and gamified space learning experience. Meet Quackstronaut, your friendly AI space duck companion, and embark on cosmic adventures while discovering Near-Earth Objects!
 
-![CosmoDex Banner](https://github.com/yourusername/cosmic-sentinel/raw/main/banner.png)
+<img width="1892" height="912" alt="Screenshot 2025-07-27 192606" src="https://github.com/user-attachments/assets/09259bd9-6979-4314-9b26-a395437eb17f" />
+
+<img width="1887" height="906" alt="Screenshot 2025-07-27 192518" src="https://github.com/user-attachments/assets/b7cc86a9-1fe1-4f65-877d-a4a0cf2c4150" />
+
+<img width="1901" height="913" alt="Screenshot 2025-07-27 192252" src="https://github.com/user-attachments/assets/ac401b1f-1a5f-458d-a618-c7c64bb6d9c0" />
 
 ## ✨ Features
 
