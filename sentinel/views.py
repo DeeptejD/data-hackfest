@@ -49,28 +49,59 @@ def logout(request):
 def home(request):
     user = request.session.get('user')
     
-    # Generate daily briefing for authenticated users
-    daily_briefing = None
-    if user:
-        try:
-            # Track daily briefing interaction
-            track_user_interaction(user['email'], 'daily_briefing')
-            
-            # Get today's NEOs for the briefing
-            from datetime import date
-            today_str = date.today().strftime('%Y-%m-%d')
-            current_neos = fetch_neos(today_str, today_str)
-            
-            # Generate personalized daily briefing
-            daily_briefing = generate_daily_briefing(user.get('name', 'Explorer'), current_neos)
-        except Exception as e:
-            # Fallback briefing if API fails
-            daily_briefing = f"🦆 Quack quack, {user.get('name', 'Explorer')}! Welcome back to the CosmoDex space lab! Even when the cosmic data streams are a bit wobbly, there's always something amazing happening in our solar system. Today's a perfect day to explore our asteroid database and maybe discover your new favorite space rock! Ready to dive into some cosmic adventures? 🚀✨"
-    
+    # No longer generate briefing here - it will be loaded asynchronously
     return render(request, 'sentinel/home.html', context={
-        'user': user,
-        'daily_briefing': daily_briefing
+        'user': user
     })
+
+# Async endpoint for daily briefing
+def get_daily_briefing(request):
+    user = request.session.get('user')
+    if not user:
+        return JsonResponse({'error': 'Not authenticated'}, status=401)
+    
+    try:
+        from datetime import date
+        from django.core.cache import cache
+        
+        # Create a cache key based on user and date
+        today_str = date.today().strftime('%Y-%m-%d')
+        cache_key = f"daily_briefing_{user['email']}_{today_str}"
+        
+        # Try to get cached briefing first
+        cached_briefing = cache.get(cache_key)
+        if cached_briefing:
+            return JsonResponse({
+                'briefing': cached_briefing,
+                'cached': True
+            })
+        
+        # Track daily briefing interaction
+        track_user_interaction(user['email'], 'daily_briefing')
+        
+        # Get today's NEOs for the briefing
+        current_neos = fetch_neos(today_str, today_str)
+        
+        # Generate personalized daily briefing
+        daily_briefing = generate_daily_briefing(user.get('name', 'Explorer'), current_neos)
+        
+        # Cache the briefing for 24 hours (86400 seconds)
+        cache.set(cache_key, daily_briefing, 86400)
+        
+        return JsonResponse({
+            'briefing': daily_briefing,
+            'cached': False
+        })
+        
+    except Exception as e:
+        # Fallback briefing if API fails
+        fallback_briefing = f"🦆 Quack quack, {user.get('name', 'Explorer')}! Welcome back to the CosmoDex space lab! Even when the cosmic data streams are a bit wobbly, there's always something amazing happening in our solar system. Today's a perfect day to explore our asteroid database and maybe discover your new favorite space rock! Ready to dive into some cosmic adventures? 🚀✨"
+        
+        return JsonResponse({
+            'briefing': fallback_briefing,
+            'cached': False,
+            'fallback': True
+        })
 
 # neos listing page
 def index(request):

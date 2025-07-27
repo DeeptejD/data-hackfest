@@ -559,7 +559,7 @@
     </main>
 
     <!-- Floating Quackstronaut Duck -->
-    {% if user and user.name and daily_briefing %}
+    {% if user and user.name %}
     <div class="floating-duck" onclick="toggleSpeechBubble()">
         <img src="{% static 'sentinel/images/quackstronaut.png' %}" 
              alt="Quackstronaut" 
@@ -584,17 +584,21 @@
                      alt="Quackstronaut" 
                      class="w-full h-full object-cover rounded-full">
             </div>
-            <div class="flex-1">
+            <div class="flex-1" id="briefingContent">
                 <div class="text-xs text-electric-blue font-bold mb-1">🦆 QUACKSTRONAUT SAYS:</div>
-                <div class="text-white text-sm leading-relaxed whitespace-pre-line">
-                    {{ daily_briefing }}
+                <div class="text-white text-sm leading-relaxed whitespace-pre-line" id="briefingText">
+                    <div class="flex items-center space-x-2">
+                        <div class="animate-spin rounded-full h-4 w-4 border-2 border-electric-blue border-t-transparent"></div>
+                        <span>🛰️ Establishing cosmic connection...</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="text-center">
-            <button onclick="location.reload()" 
-                    class="bg-gradient-to-r from-hot-pink to-electric-blue hover:from-neon-green hover:to-hot-pink text-white px-4 py-1.5 rounded-lg font-bold transition-all duration-300 text-xs hover:scale-105">
+            <button onclick="refreshBriefing()" 
+                    class="bg-gradient-to-r from-hot-pink to-electric-blue hover:from-neon-green hover:to-hot-pink text-white px-4 py-1.5 rounded-lg font-bold transition-all duration-300 text-xs hover:scale-105"
+                    id="refreshButton">
                 🔄 GET NEW BRIEFING
             </button>
         </div>
@@ -603,10 +607,89 @@
 
     <!-- Cool JavaScript for extra interactivity -->
     <script>
+        // Load daily briefing asynchronously
+        let briefingLoaded = false;
+        
+        async function loadDailyBriefing() {
+            if (briefingLoaded) return;
+            
+            try {
+                const response = await fetch('/api/daily-briefing/');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('briefingText').innerHTML = data.briefing;
+                    briefingLoaded = true;
+                    
+                    // Update refresh button text based on cache status
+                    const refreshBtn = document.getElementById('refreshButton');
+                    if (data.cached) {
+                        refreshBtn.innerHTML = '✨ TODAY\'S BRIEFING';
+                        refreshBtn.disabled = true;
+                        refreshBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    }
+                } else {
+                    throw new Error(data.error || 'Failed to load briefing');
+                }
+            } catch (error) {
+                console.error('Error loading daily briefing:', error);
+                document.getElementById('briefingText').innerHTML = 
+                    '🚫 Cosmic transmission interrupted! Please try again later.';
+            }
+        }
+        
+        async function refreshBriefing() {
+            const refreshBtn = document.getElementById('refreshButton');
+            const originalText = refreshBtn.innerHTML;
+            
+            // Show loading state
+            refreshBtn.innerHTML = '🔄 LOADING...';
+            refreshBtn.disabled = true;
+            
+            document.getElementById('briefingText').innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <div class="animate-spin rounded-full h-4 w-4 border-2 border-electric-blue border-t-transparent"></div>
+                    <span>🛰️ Fetching fresh cosmic intel...</span>
+                </div>
+            `;
+            
+            try {
+                // Force refresh by adding cache-busting parameter
+                const response = await fetch('/api/daily-briefing/?refresh=true');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('briefingText').innerHTML = data.briefing;
+                    
+                    if (data.cached) {
+                        refreshBtn.innerHTML = '✨ TODAY\'S BRIEFING';
+                        refreshBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    } else {
+                        refreshBtn.innerHTML = originalText;
+                        refreshBtn.disabled = false;
+                        refreshBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                } else {
+                    throw new Error(data.error || 'Failed to refresh briefing');
+                }
+            } catch (error) {
+                console.error('Error refreshing briefing:', error);
+                document.getElementById('briefingText').innerHTML = 
+                    '🚫 Cosmic transmission interrupted! Please try again later.';
+                refreshBtn.innerHTML = originalText;
+                refreshBtn.disabled = false;
+            }
+        }
+
         // Speech bubble functions
         function toggleSpeechBubble() {
             const bubble = document.getElementById('speechBubble');
             bubble.classList.toggle('show');
+            
+            // Load briefing when bubble is first opened
+            if (bubble.classList.contains('show') && !briefingLoaded) {
+                loadDailyBriefing();
+            }
         }
 
         function closeSpeechBubble() {

@@ -30,5 +30,6 @@ urlpatterns = [
     path("neos/favorites/", views.favorites, name="favorites"),
     path("neos/", views.index, name="neos"),
     path("profile/", views.profile, name="profile"),
+    path("api/daily-briefing/", views.get_daily_briefing, name="daily_briefing"),
     path('', views.home, name='home'),
 ]
