@@ -1,28 +1,41 @@
-# 🚀 CosmoDex
+<img width="1230" height="168" alt="logo-text" src="https://github.com/user-attachments/assets/8cbfc60c-1f93-4c18-bea3-5f7b9e3f16b3" />
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
-[![Django](https://img.shields.io/badge/Django-5.2.4-green.svg)](https://djangoproject.com)
+<div align="center">
 
-> **Transform NASA's asteroid data into an engaging space exploration adventure for young astronomers! 🌌**
+   [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
+   [![Django](https://img.shields.io/badge/Django-5.2.4-green.svg)](https://djangoproject.com)
 
-CosmoDex is an interactive web application that combines real-time NASA Near Earth Object (NEO) data with AI-powered storytelling to create an educational and gamified space learning experience. Meet Quackstronaut <img src="https://res.cloudinary.com/de5vfgkg4/image/upload/v1753592087/quackstronaut_gsvsvw.png" alt="quackstronaut" width="30" valign="middle" />, your friendly AI space duck companion, and embark on cosmic adventures while discovering Near-Earth Objects!
+🏆 _**[Winner of the Best UI/UX Project @ MLH Data Hackfest](https://devpost.com/software/cosmodex)**_  
 
-> Quickly find references 
-- [Check Out Auth0 usage here](https://github.com/DeeptejD/data-hackfest/blob/main/sentinel/views.py) </br>
-- [Check Out Gemini usage here](https://github.com/DeeptejD/data-hackfest/blob/main/sentinel/gemini.py)
+</div>
 
-## Screenshots!
+CosmoDex is an interactive web application that combines real-time _**NASA Near Earth Object (NEO) data**_ with AI-powered storytelling to create an educational and gamified space learning experience. Meet **_Quackstronaut_** <img src="https://res.cloudinary.com/de5vfgkg4/image/upload/v1753592087/quackstronaut_gsvsvw.png" alt="quackstronaut" width="25" valign="middle" /> your friendly AI space duck sidekick (Inspired by the debugging duck!), and embark on cosmic adventures while discovering Near-Earth Objects! 🌠
 
-This is the NEO details view, shows a summary for various features of a NEO, powered by Gemini!
-<img width="1755" height="1538" alt="image" src="https://github.com/user-attachments/assets/4e964e6b-314c-49a2-b7fd-37cb5cc97e03" />
+## The website
 
-<img width="1887" height="906" alt="Screenshot 2025-07-27 192518" src="https://github.com/user-attachments/assets/b7cc86a9-1fe1-4f65-877d-a4a0cf2c4150" />
+This is the _CosmoDex Dashboard_. It shows a daily briefing by your friendly AI space duck sidekick, _yep you know who!_ <img src="https://res.cloudinary.com/de5vfgkg4/image/upload/v1753592087/quackstronaut_gsvsvw.png" alt="quackstronaut" width="25" valign="middle" /> powered by _Gemini_!
 
 <img width="1901" height="913" alt="Screenshot 2025-07-27 192252" src="https://github.com/user-attachments/assets/ac401b1f-1a5f-458d-a618-c7c64bb6d9c0" />
 
-## ✨ Features
 
-### 🌟 **Core Functionality**
+This is the list of _NEOs (Near-Earth Objects)_ fetched using the _[NASA NeoWs Open Data](https://api.nasa.gov/)_. All displayed in fun little cards!
+
+<img width="1887" height="906" alt="Screenshot 2025-07-27 192518" src="https://github.com/user-attachments/assets/b7cc86a9-1fe1-4f65-877d-a4a0cf2c4150" />
+
+
+This is the _NEO (Near-Earth Objects) details view_. It shows a summary for various features of a NEO like its velocity, proximity, size and fly-by date, powered by _Gemini_!
+
+<img width="1755" height="1538" alt="image" src="https://github.com/user-attachments/assets/4e964e6b-314c-49a2-b7fd-37cb5cc97e03" />
+
+
+## The Goal
+When building this website I had just one goal - To breathe life into NASA's NeoWs Data and personalize and gamify the entire experience! I wanted users to be able to _question the data itself_, and know more about what they are seeing. Quackstronaut comes to the rescue, backed by Gemini!
+
+## What I used to build this
+
+[![Django](https://img.shields.io/badge/Django-5.2.4-darkgreen?logo=django&logoColor=white)](https://www.djangoproject.com/) [![SQLite](https://img.shields.io/badge/SQLite-blue?logo=sqlite&logoColor=white)](https://www.sqlite.org/index.html) [![Auth0](https://img.shields.io/badge/Auth0-authentication-orange?logo=auth0&logoColor=white)](https://auth0.com/) [![HTML5](https://img.shields.io/badge/HTML5-e34f26?logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5) [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38b2ac?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/) [![JavaScript](https://img.shields.io/badge/JavaScript-f7df1e?logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript) [![Gemini API](https://img.shields.io/badge/Google_Gemini-AI-black?logo=google&logoColor=white)](https://ai.google.dev/) [![NASA API](https://img.shields.io/badge/NASA_NEO_API-data-blue?logo=nasa&logoColor=white)](https://api.nasa.gov/)
+
+### Core Functionality
 - **Real-time NASA Data**: Live Near-Earth Object (NEO) tracking from NASA's API
 - **AI-Powered Content**: Personalized space briefings and asteroid analyses using Google Gemini
 - **Interactive Chatbot**: Meet Quackstronaut, your friendly space duck AI companion
@@ -30,34 +43,17 @@ This is the NEO details view, shows a summary for various features of a NEO, pow
 - **Favorites Collection**: Save and organize your favorite asteroids
 - **Responsive Design**: Beautiful space-themed UI that works on all devices
 
-### 🤖 **AI Integration**
+### **AI Storytelling**
 - **Daily Briefings**: Personalized space news generated by AI
 - **Smart Summaries**: Kid-friendly asteroid explanations
 - **Interactive Chat**: Ask Quackstronaut questions about space and asteroids
 - **Fun Descriptions**: Engaging, educational content for young learners
 
-### 🎮 **Gamification**
+### **Gamification**
 - **Progress Tracking**: Monitor your space exploration journey
 - **Badge System**: Unlock achievements across multiple categories
 - **User Statistics**: View your cosmic accomplishments
 - **Motivational Design**: Encouraging interface to keep learning fun
-
-## 🛠️ Tech Stack
-
-**Backend:**
-- Python 3.8+
-- Django 5.2.4
-- SQLite (development) / PostgreSQL (production ready)
-- Auth0 (Authentication)
-- Google Gemini API (AI content generation)
-- NASA NEO Web Service API
-
-**Frontend:**
-- HTML5 & CSS3
-- Tailwind CSS
-- Vanilla JavaScript (ES6+)
-- Responsive Design
-- Custom animations and effects
 
 ## 🚀 Quick Start
 
