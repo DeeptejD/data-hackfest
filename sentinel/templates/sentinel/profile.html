@@ -1,0 +1,366 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.name }}'s Profile - CosmoDex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'space-black': '#0a0a0f',
+                        'space-gray': '#1a1a2e',
+                        'space-blue': '#16213e',
+                        'cosmic-purple': '#6366f1',
+                        'stellar-cyan': '#06b6d4',
+                        'neon-green': '#39ff14',
+                        'electric-blue': '#00ffff',
+                        'hot-pink': '#ff1493'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap');
+
+        /* Hand-drawn pencil border effect */
+        .sketch-border {
+            position: relative;
+            border: none;
+        }
+
+        .sketch-border::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: transparent;
+            border: 2px solid #39ff14;
+            border-radius: 15px;
+            filter: url(#roughen);
+            animation: sketch-glow 3s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .sketch-border-purple::before {
+            border-color: #ff1493;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .sketch-border-cyan::before {
+            border-color: #00ffff;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes sketch-glow {
+            0% {
+                filter: drop-shadow(0 0 5px currentColor);
+                transform: rotate(-0.5deg);
+            }
+            100% {
+                filter: drop-shadow(0 0 15px currentColor);
+                transform: rotate(0.5deg);
+            }
+        }
+
+        /* Science lab notebook lines */
+        .lab-notes {
+            background-image:
+                linear-gradient(90deg, #ff1493 0%, transparent 1%),
+                linear-gradient(0deg, rgba(57, 255, 20, 0.1) 0%, transparent 1%);
+            background-size: 20px 20px;
+        }
+
+        /* Retro CRT screen effect */
+        .crt-screen {
+            background: linear-gradient(180deg,
+                    transparent 50%,
+                    rgba(0, 255, 255, 0.03) 50%);
+            background-size: 100% 4px;
+            animation: crt-flicker 0.15s infinite linear;
+        }
+
+        @keyframes crt-flicker {
+            0% { opacity: 1; }
+            98% { opacity: 1; }
+            99% { opacity: 0.98; }
+            100% { opacity: 1; }
+        }
+
+        /* Cool holographic text effect */
+        .holo-text {
+            background: linear-gradient(45deg, #39ff14, #00ffff, #ff1493, #6366f1);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: holo-shift 3s ease-in-out infinite;
+        }
+
+        @keyframes holo-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Space background with stars */
+        .space-bg {
+            background: radial-gradient(ellipse at top, #1e3a8a 0%, #0f172a 50%, #000000 100%);
+            position: relative;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .space-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, white, transparent),
+                radial-gradient(2px 2px at 40px 70px, white, transparent),
+                radial-gradient(1px 1px at 90px 40px, white, transparent),
+                radial-gradient(1px 1px at 130px 80px, white, transparent),
+                radial-gradient(2px 2px at 160px 30px, white, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: twinkle 3s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Achievement card hover effects */
+        .achievement-card {
+            transition: all 0.3s ease;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .achievement-unlocked {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid #39ff14;
+        }
+
+        .achievement-locked {
+            background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
+            border: 2px solid #666;
+            opacity: 0.6;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            background: linear-gradient(90deg, #39ff14, #00ffff);
+            border-radius: 10px;
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px rgba(57, 255, 20, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.8); }
+        }
+    </style>
+
+    <!-- SVG Filters for rough pencil effect -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <defs>
+            <filter id="roughen">
+                <feTurbulence baseFrequency="0.04" numOctaves="3" result="noise" seed="1" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+            </filter>
+        </defs>
+    </svg>
+</head>
+
+<body class="bg-space-black min-h-screen crt-screen lab-notes" style="font-family: 'Space Mono', monospace;">
+    <!-- Navigation -->
+    <nav class="bg-space-gray relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-8 relative z-20">
+                    <div class="flex items-center space-x-3">
+                        <h1 class="text-2xl font-black holo-text" style="font-family: 'Orbitron', monospace;">
+                            COSMODEX
+                        </h1>
+                    </div>
+
+                    <div class="hidden md:flex space-x-8 relative z-20">
+                        <a href="/" class="text-gray-300 hover:text-neon-green transition-colors duration-200 font-bold relative group z-30">
+                            Home
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-neon-green group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                        <a href="/neos" class="text-gray-300 hover:text-neon-green transition-colors duration-200 font-bold relative group z-30">
+                            NEOs
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-neon-green group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                        <a href="/neos/favorites" class="text-gray-300 hover:text-hot-pink transition-colors duration-200 font-bold relative group z-30">
+                            Favorites
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-hot-pink group-hover:w-full transition-all duration-300"></span>
+                        </a>
+                        <a href="/profile" class="text-electric-blue font-black relative z-30">
+                            Profile
+                            <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-electric-blue"></span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 relative z-30">
+                    <div class="text-neon-green font-bold">{{ user.name }}</div>
+                    <a href="/logout" class="text-red-400 hover:text-red-300 transition-colors duration-200 font-bold relative z-30">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <!-- Profile Header -->
+        <section class="text-center mb-12">
+            <h2 class="text-5xl font-black mb-6 holo-text" style="font-family: 'Orbitron', monospace;">
+                EXPLORER PROFILE
+            </h2>
+            <div class="text-3xl text-white font-bold mb-4">
+                <span class="text-neon-green">🚀 SPACE EXPLORER:</span>
+                <span class="text-electric-blue">{{ user.name }}</span>
+            </div>
+            <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+                Your cosmic journey through the CosmoDex universe. Track your achievements, view your stats, and see how far you've come in exploring the wonders of our solar system!
+            </p>
+        </section>
+
+        <!-- Stats Dashboard -->
+        <section class="grid md:grid-cols-4 gap-6 mb-12">
+            <div class="sketch-border bg-space-gray rounded-xl p-6 text-center">
+                <div class="text-3xl font-black text-neon-green mb-2">{{ stats.total_questions }}</div>
+                <div class="text-sm text-gray-300 font-bold">Questions Asked</div>
+                <div class="text-xs text-electric-blue">💬 Chat Interactions</div>
+            </div>
+            
+            <div class="sketch-border bg-space-gray rounded-xl p-6 text-center">
+                <div class="text-3xl font-black text-hot-pink mb-2">{{ stats.favorites_count }}</div>
+                <div class="text-sm text-gray-300 font-bold">NEOs Favorited</div>
+                <div class="text-xs text-stellar-cyan">⭐ Cosmic Collection</div>
+            </div>
+            
+            <div class="sketch-border bg-space-gray rounded-xl p-6 text-center">
+                <div class="text-3xl font-black text-electric-blue mb-2">{{ stats.neos_viewed }}</div>
+                <div class="text-sm text-gray-300 font-bold">NEOs Explored</div>
+                <div class="text-xs text-neon-green">🛸 Discovery Missions</div>
+            </div>
+            
+            <div class="sketch-border bg-space-gray rounded-xl p-6 text-center">
+                <div class="text-3xl font-black text-cosmic-purple mb-2">{{ stats.achievements_count }}</div>
+                <div class="text-sm text-gray-300 font-bold">Achievements</div>
+                <div class="text-xs text-hot-pink">🏆 {{ stats.achievements_count }}/{{ stats.total_achievements }}</div>
+            </div>
+        </section>
+
+        <!-- Achievement Progress -->
+        <section class="mb-12">
+            <div class="sketch-border sketch-border-purple bg-space-gray rounded-2xl p-8">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-black text-white mb-2" style="font-family: 'Orbitron', monospace;">
+                        ACHIEVEMENT PROGRESS
+                    </h3>
+                    <div class="text-hot-pink font-bold">{{ stats.achievements_count }}/{{ stats.total_achievements }} UNLOCKED</div>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="w-full bg-space-black rounded-full h-4 mb-4">
+                    <div class="progress-bar h-4 rounded-full" style="width: {% widthratio stats.achievements_count stats.total_achievements 100 %}%"></div>
+                </div>
+                
+                <div class="text-center text-gray-300 text-sm">
+                    {% widthratio stats.achievements_count stats.total_achievements 100 %}% Complete
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section>
+            <h3 class="text-3xl font-black text-center mb-8 holo-text" style="font-family: 'Orbitron', monospace;">
+                COSMIC ACHIEVEMENTS
+            </h3>
+
+            <!-- Unlocked Achievements -->
+            {% if achievements.unlocked %}
+            <div class="mb-12">
+                <h4 class="text-xl font-bold text-neon-green mb-6 flex items-center">
+                    <span class="mr-2">🏆</span> UNLOCKED ACHIEVEMENTS
+                </h4>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for user_achievement in achievements.unlocked %}
+                    <div class="achievement-card achievement-unlocked rounded-xl p-6">
+                        <div class="text-center">
+                            <div class="text-4xl mb-3">{{ user_achievement.achievement.icon }}</div>
+                            <h5 class="text-lg font-black text-white mb-2">{{ user_achievement.achievement.name }}</h5>
+                            <p class="text-sm text-gray-300 mb-3">{{ user_achievement.achievement.description }}</p>
+                            <div class="text-xs text-neon-green font-bold">
+                                ✅ Unlocked {{ user_achievement.unlocked_at|date:"M j, Y" }}
+                            </div>
+                            <div class="text-xs text-electric-blue mt-1">
+                                {{ user_achievement.achievement.category }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Locked Achievements -->
+            {% if achievements.locked %}
+            <div>
+                <h4 class="text-xl font-bold text-gray-400 mb-6 flex items-center">
+                    <span class="mr-2">🔒</span> LOCKED ACHIEVEMENTS
+                </h4>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for achievement in achievements.locked %}
+                    <div class="achievement-card achievement-locked rounded-xl p-6">
+                        <div class="text-center">
+                            <div class="text-4xl mb-3 opacity-50">{{ achievement.icon }}</div>
+                            <h5 class="text-lg font-black text-gray-400 mb-2">{{ achievement.name }}</h5>
+                            <p class="text-sm text-gray-500 mb-3">{{ achievement.description }}</p>
+                            <div class="text-xs text-gray-500 font-bold">
+                                🎯 Requirement: {{ achievement.requirement }}
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">
+                                {{ achievement.category }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Back to Dashboard -->
+        <div class="text-center mt-12">
+            <a href="/" class="bg-gradient-to-r from-cosmic-purple to-hot-pink hover:from-hot-pink hover:to-electric-blue text-white py-4 px-8 rounded-xl font-black text-lg transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-105">
+                🚀 RETURN TO MISSION CONTROL
+            </a>
+        </div>
+    </main>
+
+</body>
+</html>

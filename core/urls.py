@@ -29,5 +29,6 @@ urlpatterns = [
     path("unfavorite/", views.unfavorite, name="unfavorite"),
     path("neos/favorites/", views.favorites, name="favorites"),
     path("neos/", views.index, name="neos"),
+    path("profile/", views.profile, name="profile"),
     path('', views.home, name='home'),
 ]

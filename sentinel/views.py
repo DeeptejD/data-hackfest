@@ -7,6 +7,7 @@ from .nasa import fetch_neos
 from django.views.decorators.csrf import csrf_exempt
 from .gemini import summarize_asteroid, generate_fun_descriptions, chat_with_quackstronaut, generate_daily_briefing
 from .models import FavoriteNEO
+from .achievements import track_user_interaction, get_user_stats, get_user_achievements
 
 
 # AUTH0 related stuff --------
@@ -52,6 +53,9 @@ def home(request):
     daily_briefing = None
     if user:
         try:
+            # Track daily briefing interaction
+            track_user_interaction(user['email'], 'daily_briefing')
+            
             # Get today's NEOs for the briefing
             from datetime import date
             today_str = date.today().strftime('%Y-%m-%d')
@@ -124,6 +128,10 @@ def neo_details(request):
         fun_descriptions = generate_fun_descriptions(neo)
         user = request.session.get('user')
         
+        # Track NEO viewing for achievements
+        if user:
+            track_user_interaction(user['email'], 'neo_viewed', neo['name'])
+        
         # Check if this NEO is already favorited by the user
         is_favorited = False
         if user:
@@ -153,6 +161,12 @@ def chat_quackstronaut(request):
             'date': request.POST.get("date"),
         }
         question = request.POST.get("question")
+        user = request.session.get('user')
+        
+        # Track chat question for achievements
+        if user:
+            track_user_interaction(user['email'], 'chat_question', neo['name'])
+        
         response = chat_with_quackstronaut(neo, question)
         
         return JsonResponse({
@@ -193,6 +207,9 @@ def save_favorite(request):
                         miss_distance=request.POST.get("miss_distance"),
                         date=request.POST.get("date"),
                     )
+                    # Track favoriting for achievements (only for new favorites)
+                    track_user_interaction(user['email'], 'neo_favorited', neo_name)
+                    
             except Exception as e:
                 # Handle any database errors gracefully
                 print(f"Error saving favorite: {e}")
@@ -233,4 +250,21 @@ def unfavorite(request):
             return redirect(referer)
                 
     return redirect("/neos")
+
+
+# User profile page with achievements and stats
+def profile(request):
+    user = request.session.get('user')
+    if not user:
+        return redirect("/")
+    
+    # Get user stats and achievements
+    stats = get_user_stats(user['email'])
+    achievements = get_user_achievements(user['email'])
+    
+    return render(request, 'sentinel/profile.html', {
+        'user': user,
+        'stats': stats,
+        'achievements': achievements
+    })
 

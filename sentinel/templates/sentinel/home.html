@@ -399,7 +399,10 @@
                 {% if user and user.name %}
                 <!-- User Info -->
                 <div class="flex items-center space-x-4 relative z-30">
-                    <div class="text-neon-green font-bold">{{ user.name }}</div>
+                    <a href="/profile" class="text-cosmic-purple hover:text-hot-pink transition-colors duration-200 font-bold relative group z-30">
+                        👤 Profile
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-cosmic-purple group-hover:w-full transition-all duration-300"></span>
+                    </a>
                     <a href="/logout" class="text-red-400 hover:text-red-300 transition-colors duration-200 font-bold relative z-30">
                         Logout
                     </a>
