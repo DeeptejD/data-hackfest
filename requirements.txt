@@ -1,0 +1,7 @@
+Django==5.2.4
+python-dotenv==1.0.0
+authlib==1.2.1
+requests==2.31.0
+google-generativeai==0.3.2
+gunicorn==21.2.0
+whitenoise==6.6.0
