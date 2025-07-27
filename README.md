@@ -62,12 +62,13 @@ When building this website I had just one goal - To breathe life into NASA's Neo
 - Python 3.8 or higher
 - pip (Python package manager)
 - Git
+- You will need a few API keys, mentioned below 👇🏼 
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/cosmic-sentinel.git
-cd cosmic-sentinel
+git clone https://github.com/deeptejd/data-hackfest.git
+cd data-hackfest
 ```
 
 ### 2. Set Up Virtual Environment
@@ -126,11 +127,9 @@ python manage.py create_achievements
 python manage.py runserver
 ```
 
-Visit `http://localhost:8000` to start your cosmic journey! 🌌
+Go to `http://localhost:8000` to visit your space lab!
 
-## 🔧 Detailed Setup Guide
-
-### Getting API Keys
+### Getting the API Keys 
 
 #### NASA API Key
 1. Visit [NASA API Portal](https://api.nasa.gov/)
