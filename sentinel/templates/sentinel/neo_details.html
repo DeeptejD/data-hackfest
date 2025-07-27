@@ -205,6 +205,64 @@
                 opacity: 0.8;
             }
         }
+        
+        /* Floating rotating duck for chat */
+        .floating-duck {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 100px;
+            height: 100px;
+            background: rgba(135, 206, 250, 0.15);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(135, 206, 250, 0.3), inset 0 2px 10px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(173, 216, 230, 0.8);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+        
+        .floating-duck:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 48px rgba(135, 206, 250, 0.5), inset 0 2px 15px rgba(255, 255, 255, 0.2);
+            border-color: rgba(173, 216, 230, 1);
+        }
+        
+        .duck-image {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            animation: rotate360 8s linear infinite;
+        }
+        
+        @keyframes rotate360 {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .floating-duck {
+                right: 20px;
+                bottom: 20px;
+                width: 85px;
+                height: 85px;
+            }
+            .duck-image {
+                width: 55px;
+                height: 55px;
+            }
+            #chatWindow {
+                bottom: 28 !important;
+                right: 2 !important;
+                width: 90vw !important;
+                max-width: 350px !important;
+            }
+        }
     </style>
 
     <!-- SVG Filters for rough pencil effect -->
@@ -553,12 +611,11 @@
 
     <!-- QUACKSTRONAUT AI ASSISTANT -->
     <div class="fixed bottom-2 right-2 z-50">
-        <!-- Chat Toggle Button -->
-        <div id="chatToggle" class="cursor-pointer">
-            <div class="w-24 h-24">
-                <img src="{% static 'sentinel/images/quackstronaut.png' %}" alt="Quackstronaut"
-                    class="w-full h-full object-cover" />
-            </div>
+        <!-- Floating Duck Chat Toggle -->
+        <div id="chatToggle" class="floating-duck cursor-pointer">
+            <img src="{% static 'sentinel/images/quackstronaut.png' %}" 
+                 alt="Quackstronaut" 
+                 class="duck-image">
         </div>
 
         <!-- Chat Window -->

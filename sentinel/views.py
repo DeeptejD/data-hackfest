@@ -5,7 +5,7 @@ from django.contrib.auth import logout as django_logout
 from django.http import HttpResponseRedirect, JsonResponse
 from .nasa import fetch_neos
 from django.views.decorators.csrf import csrf_exempt
-from .gemini import summarize_asteroid, generate_fun_descriptions, chat_with_quackstronaut
+from .gemini import summarize_asteroid, generate_fun_descriptions, chat_with_quackstronaut, generate_daily_briefing
 from .models import FavoriteNEO
 
 
@@ -47,7 +47,26 @@ def logout(request):
 # Before and After login home page loads on root
 def home(request):
     user = request.session.get('user')
-    return render(request, 'sentinel/home.html', context={'user': user})
+    
+    # Generate daily briefing for authenticated users
+    daily_briefing = None
+    if user:
+        try:
+            # Get today's NEOs for the briefing
+            from datetime import date
+            today_str = date.today().strftime('%Y-%m-%d')
+            current_neos = fetch_neos(today_str, today_str)
+            
+            # Generate personalized daily briefing
+            daily_briefing = generate_daily_briefing(user.get('name', 'Explorer'), current_neos)
+        except Exception as e:
+            # Fallback briefing if API fails
+            daily_briefing = f"🦆 Quack quack, {user.get('name', 'Explorer')}! Welcome back to the CosmoDex space lab! Even when the cosmic data streams are a bit wobbly, there's always something amazing happening in our solar system. Today's a perfect day to explore our asteroid database and maybe discover your new favorite space rock! Ready to dive into some cosmic adventures? 🚀✨"
+    
+    return render(request, 'sentinel/home.html', context={
+        'user': user,
+        'daily_briefing': daily_briefing
+    })
 
 # neos listing page
 def index(request):

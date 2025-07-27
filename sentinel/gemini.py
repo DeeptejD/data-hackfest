@@ -84,3 +84,54 @@ If the question isn't about this asteroid or space, gently redirect to the aster
     response = model.generate_content(prompt)
     
     return response.text.strip()
+
+
+def generate_daily_briefing(user_name, current_neos):
+    # Get today's date
+    from datetime import date
+    today = date.today().strftime("%B %d, %Y")
+    
+    # Prepare NEO information for the briefing
+    neo_info = ""
+    if current_neos and len(current_neos) > 0:
+        # Pick the most interesting NEOs (largest, closest, or fastest)
+        interesting_neos = sorted(current_neos, key=lambda x: float(x.get('diameter', '0')), reverse=True)[:3]
+        neo_info = "\n".join([f"- {neo['name']}: {neo['diameter']}m wide, flying by at {neo['speed']} km/s on {neo['date']}" 
+                             for neo in interesting_neos])
+    else:
+        neo_info = "- No significant asteroids visiting today, but the cosmos is always full of surprises!"
+    
+    prompt = f"""
+You are Quackstronaut, the most enthusiastic space duck in the galaxy! Generate a personalized daily space briefing for {user_name} on {today}.
+
+Today's NEO Activity:
+{neo_info}
+
+Create a fun, engaging daily briefing in BULLET POINT format that includes:
+1. A personalized greeting for {user_name}
+2. Exciting commentary about today's space visitors (or general space facts if no NEOs)
+3. A fun space fact or cosmic trivia
+4. An encouraging message to explore more
+
+Requirements:
+- Keep it under 120 words total
+- Use Quackstronaut's friendly, excited personality
+- Format as bullet points using ONLY EMOJIS as bullet markers (no • symbols)
+- Make it feel personal and special for {user_name}
+- Include space puns or duck references when appropriate
+- End with motivation to use CosmoDex today
+- Use emojis strategically as both bullet points and content enhancement
+
+Format example:
+🦆 Quack quack, {user_name}! Ready for today's cosmic adventure?
+🚀 [Space news/NEO info]
+⭐ Fun fact: [Interesting space trivia]
+🔭 [Encouraging exploration message]
+
+Write it as if Quackstronaut is personally talking to {user_name} in the space lab!
+"""
+
+    model = genai.GenerativeModel(model_name="models/gemini-2.5-pro")
+    response = model.generate_content(prompt)
+    
+    return response.text.strip()

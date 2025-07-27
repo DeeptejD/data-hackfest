@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -204,6 +205,147 @@
         .interactive-element {
             position: relative;
             z-index: 20;
+        }
+        
+        /* Animation delays for typing indicator */
+        .typing-dot-1 { animation-delay: 0s; }
+        .typing-dot-2 { animation-delay: 0.1s; }
+        .typing-dot-3 { animation-delay: 0.2s; }
+        
+        /* Cosmic background pattern for speech bubbles */
+        .cosmic-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 50%, #39ff14 1px, transparent 1px), 
+                radial-gradient(circle at 80% 50%, #00ffff 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        /* Floating rotating duck */
+        .floating-duck {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 100px;
+            height: 100px;
+            background: rgba(135, 206, 250, 0.15);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(135, 206, 250, 0.3), inset 0 2px 10px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(173, 216, 230, 0.8);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+        
+        .floating-duck:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 48px rgba(135, 206, 250, 0.5), inset 0 2px 15px rgba(255, 255, 255, 0.2);
+            border-color: rgba(173, 216, 230, 1);
+        }
+        
+        .duck-image {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            animation: rotate360 8s linear infinite;
+        }
+        
+        @keyframes rotate360 {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Speech bubble */
+        .speech-bubble {
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            width: 520px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+            padding: 16px;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        .speech-bubble.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: all;
+        }
+        
+        /* Speech bubble tail */
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 25px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid #00ffff;
+        }
+        
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            right: 27px;
+            width: 0;
+            height: 0;
+            border-left: 13px solid transparent;
+            border-right: 13px solid transparent;
+            border-top: 13px solid #16213e;
+        }
+        
+        /* Close button */
+        .close-bubble {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #ff1493;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+            transition: all 0.2s ease;
+        }
+        
+        .close-bubble:hover {
+            background: #ff0080;
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .speech-bubble {
+                width: 350px;
+                right: 20px;
+                bottom: 130px;
+            }
+            .floating-duck {
+                right: 20px;
+                bottom: 20px;
+                width: 85px;
+                height: 85px;
+            }
+            .duck-image {
+                width: 55px;
+                height: 55px;
+            }
         }
     </style>
 
@@ -413,8 +555,74 @@
         {% endif %}
     </main>
 
+    <!-- Floating Quackstronaut Duck -->
+    {% if user and user.name and daily_briefing %}
+    <div class="floating-duck" onclick="toggleSpeechBubble()">
+        <img src="{% static 'sentinel/images/quackstronaut.png' %}" 
+             alt="Quackstronaut" 
+             class="duck-image">
+    </div>
+
+    <!-- Speech Bubble -->
+    <div class="speech-bubble" id="speechBubble">
+        <button class="close-bubble" onclick="closeSpeechBubble()">×</button>
+        
+        <div class="flex items-center justify-between mb-3">
+            <div>
+                <div class="text-xs text-hot-pink font-bold">DAILY TRANSMISSION</div>
+                <h3 class="text-sm font-black text-white">QUACKSTRONAUT'S BRIEFING</h3>
+            </div>
+            <div class="text-xs text-neon-green font-bold">LIVE FROM SPACE</div>
+        </div>
+
+        <div class="flex items-start space-x-3 mb-3">
+            <div class="w-8 h-8 rounded-full border-2 border-electric-blue p-1 bg-space-black flex-shrink-0">
+                <img src="{% static 'sentinel/images/quackstronaut.png' %}" 
+                     alt="Quackstronaut" 
+                     class="w-full h-full object-cover rounded-full">
+            </div>
+            <div class="flex-1">
+                <div class="text-xs text-electric-blue font-bold mb-1">🦆 QUACKSTRONAUT SAYS:</div>
+                <div class="text-white text-sm leading-relaxed whitespace-pre-line">
+                    {{ daily_briefing }}
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button onclick="location.reload()" 
+                    class="bg-gradient-to-r from-hot-pink to-electric-blue hover:from-neon-green hover:to-hot-pink text-white px-4 py-1.5 rounded-lg font-bold transition-all duration-300 text-xs hover:scale-105">
+                🔄 GET NEW BRIEFING
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Cool JavaScript for extra interactivity -->
     <script>
+        // Speech bubble functions
+        function toggleSpeechBubble() {
+            const bubble = document.getElementById('speechBubble');
+            bubble.classList.toggle('show');
+        }
+
+        function closeSpeechBubble() {
+            const bubble = document.getElementById('speechBubble');
+            bubble.classList.remove('show');
+        }
+
+        // Close speech bubble when clicking outside
+        document.addEventListener('click', function(event) {
+            const bubble = document.getElementById('speechBubble');
+            const duck = document.querySelector('.floating-duck');
+            
+            if (bubble && duck) {
+                if (!bubble.contains(event.target) && !duck.contains(event.target)) {
+                    bubble.classList.remove('show');
+                }
+            }
+        });
+
         // Add smooth hover effects with easing
         document.querySelectorAll('.sketch-border').forEach(card => {
             card.addEventListener('mouseenter', function () {
