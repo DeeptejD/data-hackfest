@@ -2,18 +2,19 @@
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![Django](https://img.shields.io/badge/Django-5.2.4-green.svg)](https://djangoproject.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Active-success.svg)]()
 
 > **Transform NASA's asteroid data into an engaging space exploration adventure for young astronomers! 🌌**
 
-CosmoDex (Cosmic Sentinel) is an interactive web application that combines real-time NASA asteroid data with AI-powered content generation to create an educational and gamified space learning experience. Meet Quackstronaut, your friendly AI space duck companion, and embark on cosmic adventures while discovering Near-Earth Objects!
+CosmoDex is an interactive web application that combines real-time NASA Near Earth Object (NEO) data with AI-powered storytelling to create an educational and gamified space learning experience. Meet Quackstronaut <img src="https://res.cloudinary.com/de5vfgkg4/image/upload/v1753592087/quackstronaut_gsvsvw.png" alt="quackstronaut" width="30" valign="middle" />, your friendly AI space duck companion, and embark on cosmic adventures while discovering Near-Earth Objects!
 
-### Quickly find references 
-[Check Out Auth0 usage here](https://github.com/DeeptejD/data-hackfest/blob/main/sentinel/views.py) </br>
-[Check Out Gemini usage here](https://github.com/DeeptejD/data-hackfest/blob/main/sentinel/gemini.py)
+> Quickly find references 
+- [Check Out Auth0 usage here](https://github.com/DeeptejD/data-hackfest/blob/main/sentinel/views.py) </br>
+- [Check Out Gemini usage here](https://github.com/DeeptejD/data-hackfest/blob/main/sentinel/gemini.py)
 
-<img width="1892" height="912" alt="Screenshot 2025-07-27 192606" src="https://github.com/user-attachments/assets/09259bd9-6979-4314-9b26-a395437eb17f" />
+## Screenshots!
+
+This is the NEO details view, shows a summary for various features of a NEO, powered by Gemini!
+<img width="1755" height="1538" alt="image" src="https://github.com/user-attachments/assets/4e964e6b-314c-49a2-b7fd-37cb5cc97e03" />
 
 <img width="1887" height="906" alt="Screenshot 2025-07-27 192518" src="https://github.com/user-attachments/assets/b7cc86a9-1fe1-4f65-877d-a4a0cf2c4150" />
 
